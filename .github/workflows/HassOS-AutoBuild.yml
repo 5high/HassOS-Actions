@@ -33,6 +33,7 @@ jobs:
     - name: Clone source code
       working-directory: /workdir
       run: |
+        apt install git-core git -y
         git clone https://github.com/home-assistant/operating-system.git
 
     - name: SSH connection to Actions
