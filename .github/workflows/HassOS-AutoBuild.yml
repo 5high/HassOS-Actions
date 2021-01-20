@@ -28,6 +28,9 @@ jobs:
     if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      
     - name: Initialization environment
       run: |
         sudo -E apt-get -qq update
