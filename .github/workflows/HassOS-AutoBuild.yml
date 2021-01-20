@@ -48,5 +48,4 @@ jobs:
       shell: bash
       run: |
         cd operating-system/
-        istty(./scripts/enter.sh)
-        make all
+        istty(./scripts/enter.sh && make all)
