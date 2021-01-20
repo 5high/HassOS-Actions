@@ -1,4 +1,4 @@
-name: Openwrt-AutoBuild
+name: HassOS-AutoBuild
 
 on:
 #  release:
