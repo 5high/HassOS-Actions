@@ -40,8 +40,7 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
-    - name: Clone source code
-      working-directory: /workdir
+    - name: Clone source code  
       run: |
         git clone https://github.com/home-assistant/operating-system.git
         cd operating-system/
