@@ -46,7 +46,6 @@ jobs:
     - name: Clone source code
       working-directory: /workdir
       run: |
-        sudo apt install git-core git -y
         git clone https://github.com/home-assistant/operating-system.git
         cd operating-system/
         ./scripts/enter.sh
