@@ -45,7 +45,8 @@ jobs:
         git clone https://github.com/home-assistant/operating-system.git
 
     - name: Build
-      shell: bash
+      shell: 'script -q -e -c "bash {0}"'
       run: |
         cd operating-system/
-        istty(./scripts/enter.sh && make all)
+        ./scripts/enter.sh
+        make all
