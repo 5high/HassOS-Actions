@@ -43,6 +43,10 @@ jobs:
     - name: Clone source code  
       run: |
         git clone https://github.com/home-assistant/operating-system.git
+
+    - name: Build
+      shell: bash
+      run: |
         cd operating-system/
         ./scripts/enter.sh
         make all
