@@ -33,7 +33,7 @@ jobs:
     - name: Clone source code
       working-directory: /workdir
       run: |
-        git clone https://github.com/home-assistant/operating-system.git hassos
+        git clone https://github.com/home-assistant/operating-system hassos
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
