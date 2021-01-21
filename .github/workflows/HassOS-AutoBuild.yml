@@ -60,5 +60,6 @@ jobs:
     - name: Build
       shell: 'script -q -e -c "bash {0}"'
       run: |
+        apt clean
         cd operating-system/
         ./scripts/enter.sh make -j$(($(nproc) + 1)) ${{matrix.target}}
