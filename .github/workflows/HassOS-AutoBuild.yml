@@ -70,6 +70,7 @@ jobs:
         sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' Dockerfile
         sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' buildroot-external/package/hassio/builder/Dockerfile
         sed -i 's/-e\ BUILDER_UID/-e TZ=Asia\/Shanghai\ -e BUILDER_UID/g' buildroot-external/package/hassio/hassio.mk 
+        sed -i 's/-e\ BUILDER_UID/-e TZ=Asia\/Shanghai\ -e BUILDER_UID/g' scripts/enter.sh
         ./scripts/enter.sh make -j$(($(nproc) + 1)) ${{matrix.target}}
 
     - name: Upload Firmware
