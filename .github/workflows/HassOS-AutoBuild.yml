@@ -62,4 +62,5 @@ jobs:
       shell: 'script -q -e -c "bash {0}"'
       run: |
         cd operating-system/
+        sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' Dockerfile
         ./scripts/enter.sh make -j$(($(nproc) + 1)) ${{matrix.target}}
