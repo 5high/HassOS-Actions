@@ -51,7 +51,7 @@ jobs:
 
     - name: Clone source code  
       run: |
-        git clone https://github.com/home-assistant/operating-system.git
+        git clone https://github.com/home-assistant/operating-system.git -b master
 
     - name: Fix Kernel Version from 5.4.82 to 5.4.83
       run: |
