@@ -63,4 +63,5 @@ jobs:
       run: |
         cd operating-system/
         sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' Dockerfile
+        sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' buildroot-external/package/hassio/builder/Dockerfile
         ./scripts/enter.sh make -j$(($(nproc) + 1)) ${{matrix.target}}
