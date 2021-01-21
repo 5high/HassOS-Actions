@@ -54,9 +54,9 @@ jobs:
       run: |
         git clone https://github.com/home-assistant/operating-system.git -b master
 
-    - name: Fix Kernel Version from 5.4.82 to 5.4.83
-      run: |
-        sed -i 's/5.4.82/5.4.83/g' operating-system/buildroot-external/configs/${{matrix.target}}_defconfig
+    #- name: Fix Kernel Version from 5.4.82 to 5.4.83
+    #  run: |
+    #    sed -i 's/5.4.82/5.4.83/g' operating-system/buildroot-external/configs/${{matrix.target}}_defconfig
 
     - name: Build
       shell: 'script -q -e -c "bash {0}"'
