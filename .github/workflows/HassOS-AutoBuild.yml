@@ -41,7 +41,8 @@ jobs:
       run: |
         sudo -E apt-get -qq update
         sudo -E apt-get -qq install git-core git
-    
+        sudo -E apt-get clean
+
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
@@ -60,6 +61,5 @@ jobs:
     - name: Build
       shell: 'script -q -e -c "bash {0}"'
       run: |
-        apt clean
         cd operating-system/
         ./scripts/enter.sh make -j$(($(nproc) + 1)) ${{matrix.target}}
