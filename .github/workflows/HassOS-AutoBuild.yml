@@ -60,9 +60,32 @@ jobs:
 
     - name: Build
       shell: 'script -q -e -c "bash {0}"'
+      id: build
       run: |
         cd operating-system/
         sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' Dockerfile
         sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' buildroot-external/package/hassio/builder/Dockerfile
         sed -i 's/-e\ BUILDER_UID/-e TZ=Asia\/Shanghai\ -e BUILDER_UID/g' buildroot-external/package/hassio/hassio.mk 
         ./scripts/enter.sh make -j$(($(nproc) + 1)) ${{matrix.target}}
+
+    - name: Upload Firmware
+      if:  steps.build.outputs.status == 'success' && !cancelled()
+      uses: actions/upload-artifact@main
+      with:
+        name: ${{matrix.target}}_Firmware
+        path: |
+          ./operating-system/release/*
+    
+    - name: Delete workflow runs
+      uses: GitRML/delete-workflow-runs@main
+      with:
+        retain_days: 1
+        keep_minimum_runs: 3
+
+    - name: Remove old Releases
+      uses: dev-drprasad/delete-older-releases@v0.1.0
+      with:
+        keep_latest: 3
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
