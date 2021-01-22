@@ -105,7 +105,6 @@ jobs:
         ./scripts/enter.sh make -j$(($(nproc) + 1)) ${{matrix.target}}
 
     - name: Upload Firmware
-      if:  steps.build.outputs.status == 'success' && !cancelled()
       uses: actions/upload-artifact@main
       with:
         name: ${{matrix.target}}_Firmware
