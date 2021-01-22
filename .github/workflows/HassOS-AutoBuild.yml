@@ -41,7 +41,7 @@ jobs:
       run: |
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update
-        sudo -E apt-get -qq remove xz-utils snmp screen ruby python3.6 python3 python2.7 powershell psmisc php8.0 php7.4 php7.2 php7.1 php5.6 perl php mysql-client-5.7 mysql-client-core-5.7 mysql-common mysql-server mysql-server-5.7 mysql-server-core-5.7
+        sudo apt-get remove -y xz-utils snmp screen ruby python3.6 python3 python2.7 powershell psmisc php8.0 php7.4 php7.2 php7.1 php5.6 perl php mysql-client-5.7 mysql-client-core-5.7 mysql-common mysql-server mysql-server-5.7 mysql-server-core-5.7
         sudo -E apt-get -qq install git-core git
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
