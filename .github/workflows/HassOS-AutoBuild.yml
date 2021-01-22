@@ -50,6 +50,7 @@ jobs:
     - name: Clone source code  
       run: |
         df -hT $PWD
+        dpkg-query -W --showformat='${Installed-Size} ${Package} ${Status}\n'|grep -v deinstall|sort -n|awk '{print $1" "$2}'
         git clone https://github.com/home-assistant/operating-system.git -b master
 
     #- name: Fix Kernel Version from 5.4.82 to 5.4.83
