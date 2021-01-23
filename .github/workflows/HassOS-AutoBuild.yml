@@ -43,7 +43,7 @@ jobs:
         sudo -E apt-get -qq update
         sudo -E apt-get -qq remove snmp screen ruby python3.6 python3 python2.7 powershell psmisc 
         sudo -E apt-get -qq remove ghc* azure-cli hhvm google-chrome-stable
-        sudo -E apt-get -qq remove dotnet-sdk-* adoptopenjdk-12-hotspot adoptopenjdk-11-hotspot adoptopenjdk-8-hotspot llvm-8-dev libgl1-mesa-dri openjdk-11-jre-headless zulu-7-azure-jdk llvm-6.0-dev libclang-cpp9 moby-containerd mono-devel moby-engine moby-cli
+        sudo -E apt-get -qq remove adoptopenjdk-12-hotspot adoptopenjdk-11-hotspot adoptopenjdk-8-hotspot llvm-8-dev libgl1-mesa-dri openjdk-11-jre-headless zulu-7-azure-jdk llvm-6.0-dev libclang-cpp9 moby-containerd mono-devel moby-engine moby-cli
         sudo -E apt-get -qq install git-core git
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
