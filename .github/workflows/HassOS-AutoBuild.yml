@@ -46,6 +46,7 @@ jobs:
         #sudo -E apt-get -qq remove adoptopenjdk-12-hotspot adoptopenjdk-11-hotspot adoptopenjdk-8-hotspot llvm-8-dev libgl1-mesa-dri openjdk-11-jre-headless zulu-7-azure-jdk
         sudo -E apt-get -qq remove llvm-6.0-dev libclang-cpp9 moby-containerd mono-devel moby-engine moby-cli
         sudo -E apt-get -qq install git-core git
+        sudo curl -sSL https://get.docker.com/ -k | sh
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "Asia/Shanghai"
