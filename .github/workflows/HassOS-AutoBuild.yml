@@ -49,14 +49,15 @@ jobs:
         sudo curl -sSL https://get.docker.com/ -k | sh
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
-        sudo rm -rf /opt /var
-        #sudo timedatectl set-timezone "Asia/Shanghai"
+        sudo mkdir /build
+        sudo chmod -R 777 /build
+        sudo timedatectl set-timezone "Asia/Shanghai"
 
     - name: Clone source code  
       run: |
         df -hT $PWD
         dpkg-query -W --showformat='${Installed-Size} ${Package} ${Status}\n'|grep -v deinstall|sort -n|awk '{print $1" "$2}'
-        git clone https://github.com/home-assistant/operating-system.git -b master
+        git clone https://github.com/home-assistant/operating-system.git -b master /build
 
     #- name: Fix Kernel Version from 5.4.82 to 5.4.83
     #  run: |
@@ -75,7 +76,7 @@ jobs:
       id: build
       run: |
         sleep $((RANDOM % 15))
-        cd operating-system/
+        cd /build
         sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' Dockerfile
         sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' buildroot-external/package/hassio/builder/Dockerfile
         sed -i 's/-e\ BUILDER_UID/-e TZ=Asia\/Shanghai\ -e BUILDER_UID/g' buildroot-external/package/hassio/hassio.mk 
@@ -114,7 +115,7 @@ jobs:
       uses: actions/upload-artifact@main
       with:
         name: ${{matrix.target}}_Firmware
-        path: operating-system/release/
+        path: /build/release/
     
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
