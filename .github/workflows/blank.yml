@@ -36,6 +36,7 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
+        shell: 'script -q -e -c "bash {0}"'
         run: |
           sudo mkdir /build
           sudo chmod -R 777 /build
