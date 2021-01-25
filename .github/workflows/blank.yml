@@ -41,7 +41,7 @@ jobs:
           sudo chmod -R 777 /build
           git clone https://github.com/home-assistant/operating-system.git -b master /build
           cd /build
-          ./scripts/entry.sh make ova
+          ./scripts/enter.sh make ova
           
       - name: SSH connection to Actions
         uses: P3TERX/ssh2actions@v1.0.0
