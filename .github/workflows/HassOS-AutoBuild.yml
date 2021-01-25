@@ -87,6 +87,7 @@ jobs:
         echo "BR2_TARGET_GENERIC_ROOT_PASSWD=\"\"" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_ROOTFS_SKELETON_DEFAULT=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_ENABLE_ROOT_LOGIN=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        echo "BR2_HOST_LZO=n" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_PACKAGE_VIM=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_PACKAGE_VIM_RUNTIME=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_PACKAGE_NANO=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
