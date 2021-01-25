@@ -72,7 +72,8 @@ jobs:
 
 
     - name: Build
-      shell: 'script -q -e -c "bash {0}"'
+      #shell: 'script -q -e -c "bash {0}"'
+      shell: bash
       id: build
       run: |
         sleep $((RANDOM % 15))
