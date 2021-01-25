@@ -39,7 +39,7 @@ jobs:
       
     - name: Initialization environment
       run: |
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        #sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update
         #sudo -E apt-get -qq remove snmp screen ruby python3.6 python3 python2.7 powershell psmisc 
         #sudo -E apt-get -qq remove azure-cli hhvm google-chrome-stable ghc-8.6.5 ghc-8.10.2 ghc-8.8.4 adoptopenjdk-12-hotspot adoptopenjdk-11-hotspot
