@@ -39,7 +39,18 @@ jobs:
         run: |
           /bin/bash download.sh
           
-          
+      - name: Upload Firmware
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{matrix.target}}_Firmware
+          path: /build/release/
+    
+      - name: Delete workflow runs
+        uses: GitRML/delete-workflow-runs@main
+        with:
+          retain_days: 1
+          keep_minimum_runs: 3
+     
       - name: SSH connection to Actions
         uses: P3TERX/ssh2actions@v1.0.0
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
