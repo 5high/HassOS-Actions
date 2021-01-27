@@ -42,8 +42,8 @@ jobs:
       - name: Upload Firmware
         uses: actions/upload-artifact@main
         with:
-          name: ${{matrix.target}}_Firmware
-          path: /build/release/
+          name: backups
+          path: release/
     
       - name: Delete workflow runs
         uses: GitRML/delete-workflow-runs@main
