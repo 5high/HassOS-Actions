@@ -37,10 +37,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Get download files from CowTransfer
         run: |
-          cat file(files.txt) | while read line
-            do
-                ./cowtransfer-uploader --password=aaabbbcc321 $line
-            done
+          /bin/bash downlaod.sh
           
           
       - name: SSH connection to Actions
