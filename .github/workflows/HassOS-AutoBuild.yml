@@ -49,7 +49,7 @@ jobs:
       run: |
         df -hT $PWD
         #dpkg-query -W --showformat='${Installed-Size} ${Package} ${Status}\n'|grep -v deinstall|sort -n|awk '{print $1" "$2}'
-        git clone https://github.com/home-assistant/operating-system.git -b master /build
+        git clone https://github.com/home-assistant/operating-system.git -b master HassOS
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
@@ -64,7 +64,7 @@ jobs:
       id: build
       run: |
         sleep $((RANDOM % 15))
-        cd /build
+        cd HassOS
         sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' Dockerfile
         sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' buildroot-external/package/hassio/builder/Dockerfile
         sed -i 's/-e\ BUILDER_UID/-e TZ=Asia\/Shanghai\ -e BUILDER_UID/g' buildroot-external/package/hassio/hassio.mk 
