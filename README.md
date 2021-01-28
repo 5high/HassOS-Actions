@@ -1,7 +1,8 @@
 # HassOS-Actions
 
 本项目为自动云编译HassOS   
-每日凌晨编译最新的stable版本HassOS   
+每日凌晨编译最新的stable版本HassOS    
+由于虚拟机镜像过大云编译会报空间不足无法成功编译，所以只提供树莓派各系列的镜像下载。
 
 # 固件特点
 
