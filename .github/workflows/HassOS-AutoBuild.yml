@@ -14,8 +14,8 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
-  #schedule:
-  #  - cron: 0 18 * * *
+  schedule:
+    - cron: 0 18 * * *
   #watch:
   #  types: [started]
 
@@ -41,17 +41,8 @@ jobs:
       run: |
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update
-        #sudo -E apt-get -qq remove snmp screen ruby python3.6 python3 python2.7 powershell psmisc 
-        #sudo -E apt-get -qq remove azure-cli hhvm google-chrome-stable ghc-8.6.5 ghc-8.10.2 ghc-8.8.4 adoptopenjdk-12-hotspot adoptopenjdk-11-hotspot
-        #sudo -E apt-get -qq remove adoptopenjdk-12-hotspot adoptopenjdk-11-hotspot adoptopenjdk-8-hotspot llvm-8-dev libgl1-mesa-dri openjdk-11-jre-headless zulu-7-azure-jdk
-        #sudo -E apt-get -qq remove llvm-6.0-dev libclang-cpp9 moby-containerd mono-devel moby-engine moby-cli
-        #sudo -E apt-get -qq install git-core git bc
-        #sudo curl -sSL https://get.docker.com/ -k | sh
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
-        #sudo -E apt-get -qq install bc
-        #sudo mkdir /build
-        #sudo chmod -R 777 /build
         sudo timedatectl set-timezone "Asia/Shanghai"
 
     - name: Clone source code  
@@ -59,10 +50,6 @@ jobs:
         df -hT $PWD
         #dpkg-query -W --showformat='${Installed-Size} ${Package} ${Status}\n'|grep -v deinstall|sort -n|awk '{print $1" "$2}'
         git clone https://github.com/home-assistant/operating-system.git -b master /build
-
-    #- name: Fix Kernel Version from 5.4.82 to 5.4.83
-    #  run: |
-    #    sed -i 's/5.4.82/5.4.83/g' operating-system/buildroot-external/configs/${{matrix.target}}_defconfig
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
@@ -84,7 +71,7 @@ jobs:
         sed -i 's/-e\ BUILDER_UID/-e TZ=Asia\/Shanghai\ -e BUILDER_UID/g' scripts/enter.sh
         sed -i 's/homeassistant/itcommander/g' buildroot-external/configs/${{matrix.target}}_defconfig
         sed -i 's/Welcome to Home Assistant/Welcome to Home Assistant (IT Commander YouTuBe Channle)/g' buildroot-external/configs/${{matrix.target}}_defconfig
-        #echo "BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        echo "BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_GENERIC_ROOT_PASSWD=\"\"" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_ROOTFS_SKELETON_DEFAULT=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_ENABLE_ROOT_LOGIN=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
@@ -98,17 +85,17 @@ jobs:
         echo "BR2_PACKAGE_NTPDATE=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_PACKAGE_NTPTIME=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_PACKAGE_TZDATA=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        #echo "BR2_PACKAGE_HTOP=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        echo "BR2_PACKAGE_HTOP=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_PACKAGE_WGET=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        #echo "BR2_PACKAGE_OPKG=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        #echo "BR2_PACKAGE_OPKG_GPG_SIGN=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        echo "BR2_PACKAGE_OPKG=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        echo "BR2_PACKAGE_OPKG_GPG_SIGN=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_INFO=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        #echo "BR2_TARGET_ROOTFS_EXT2=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        #echo "BR2_TARGET_ROOTFS_EXT2_4=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        #echo "BR2_TARGET_ROOTFS_EXT2_SIZE=\"128M\"" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        #echo "BR2_PACKAGE_HOST_E2FSPROGS=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        #echo "BR2_PACKAGE_HOST_ZIP=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        #echo "BR2_PACKAGE_HOST_PARTED=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        echo "BR2_TARGET_ROOTFS_EXT2=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        echo "BR2_TARGET_ROOTFS_EXT2_4=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        echo "BR2_TARGET_ROOTFS_EXT2_SIZE=\"128M\"" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        echo "BR2_PACKAGE_HOST_E2FSPROGS=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        echo "BR2_PACKAGE_HOST_ZIP=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        echo "BR2_PACKAGE_HOST_PARTED=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_ZONELIST=\"default\"" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_LOCALTIME=\"Asia/Shanghai\"" >> buildroot-external/configs/${{matrix.target}}_defconfig
         ./scripts/enter.sh make -j$(($(nproc) + 1)) ${{matrix.target}}
