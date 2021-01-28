@@ -105,7 +105,7 @@ jobs:
       uses: actions/upload-artifact@main
       with:
         name: ${{matrix.target}}_Firmware
-        path: /build/release/
+        path: HassOS
     
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
