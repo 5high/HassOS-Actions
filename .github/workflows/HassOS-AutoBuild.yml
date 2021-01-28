@@ -39,20 +39,20 @@ jobs:
       
     - name: Initialization environment
       run: |
-        #sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
-        #sudo -E apt-get -qq update
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        sudo -E apt-get -qq update
         #sudo -E apt-get -qq remove snmp screen ruby python3.6 python3 python2.7 powershell psmisc 
         #sudo -E apt-get -qq remove azure-cli hhvm google-chrome-stable ghc-8.6.5 ghc-8.10.2 ghc-8.8.4 adoptopenjdk-12-hotspot adoptopenjdk-11-hotspot
         #sudo -E apt-get -qq remove adoptopenjdk-12-hotspot adoptopenjdk-11-hotspot adoptopenjdk-8-hotspot llvm-8-dev libgl1-mesa-dri openjdk-11-jre-headless zulu-7-azure-jdk
         #sudo -E apt-get -qq remove llvm-6.0-dev libclang-cpp9 moby-containerd mono-devel moby-engine moby-cli
         #sudo -E apt-get -qq install git-core git bc
         #sudo curl -sSL https://get.docker.com/ -k | sh
-        #sudo -E apt-get -qq autoremove --purge
-        #sudo -E apt-get -qq clean
-        sudo -E apt-get -qq install bc
-        sudo mkdir /build
-        sudo chmod -R 777 /build
-        #sudo timedatectl set-timezone "Asia/Shanghai"
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+        #sudo -E apt-get -qq install bc
+        #sudo mkdir /build
+        #sudo chmod -R 777 /build
+        sudo timedatectl set-timezone "Asia/Shanghai"
 
     - name: Clone source code  
       run: |
