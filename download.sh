@@ -4,5 +4,5 @@ cd release
 while read line
 do
     echo "File:${line}"
-    ../cowtransfer-uploader -p 8 --password=aaabbbcc321 ${line}
+    ../cowtransfer-uploader -p 8 --password=${{ secrets.COWPASS }} ${line}
 done < ../files.txt
