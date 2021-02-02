@@ -44,7 +44,7 @@ jobs:
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "Asia/Shanghai"
-        sudo echo 'nameserver 114.114.114.114' >> /etc/resolv.conf
+        sudo echo 'nameserver 114.114.114.114' > /etc/resolv.conf
         sudo echo 'nameserver 1.1.1.1' >> /etc/resolv.conf
 
     - name: Clone source code  
