@@ -75,7 +75,7 @@ jobs:
         sed -i 's/\:\/cache/:\/cache\ -v\ \/etc\/resolv.conf:\/etc\/resolv.conf/g' scripts/enter.sh
         sed -i 's/homeassistant/itcommander/g' buildroot-external/configs/${{matrix.target}}_defconfig
         sed -i 's/Welcome to Home Assistant/Welcome to Home Assistant (IT Commander YouTuBe Channle)/g' buildroot-external/configs/${{matrix.target}}_defconfig
-        #echo "BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        echo "BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_GENERIC_ROOT_PASSWD=\"\"" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_ROOTFS_SKELETON_DEFAULT=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_ENABLE_ROOT_LOGIN=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
