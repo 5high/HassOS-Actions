@@ -31,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [rpi2,rpi3_64,rpi4_64]
+        target: [rpi2,rpi3_64,rpi4_64,ova]
 
     steps:
     - name: Checkout
