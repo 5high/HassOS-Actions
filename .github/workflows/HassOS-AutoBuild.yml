@@ -21,7 +21,6 @@ on:
 
 env:
   RUN_VALIDATION: true
-  FORCE_UNSAFE_CONFIGURE: true
 
 jobs:
   build:
@@ -67,6 +66,7 @@ jobs:
       id: build
       run: |
         sleep $((RANDOM % 15))
+        set FORCE_UNSAFE_CONFIGURE=1
         cd HassOS
         sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' Dockerfile
         sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' buildroot-external/package/hassio/builder/Dockerfile
