@@ -21,6 +21,7 @@ on:
 
 env:
   RUN_VALIDATION: true
+  FORCE_UNSAFE_CONFIGURE: true
 
 jobs:
   build:
