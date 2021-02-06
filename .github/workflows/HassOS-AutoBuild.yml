@@ -60,7 +60,7 @@ jobs:
         sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' buildroot-external/package/hassio/builder/Dockerfile
         sed -i 's/-e\ BUILDER_UID/-e TZ=Asia\/Shanghai\ -e BUILDER_UID/g' buildroot-external/package/hassio/hassio.mk 
         sed -i 's/-e\ BUILDER_UID/-e TZ=Asia\/Shanghai\ -e BUILDER_UID/g' scripts/enter.sh
-        sed -i '/set/a\set\ FORCE_UNSAFE_CONFIGURE=1' scripts/entry.sh
+        #sed -i '/set/a\set\ FORCE_UNSAFE_CONFIGURE=1' scripts/entry.sh
         sed -i 's/-e\ SUPERVISOR_NAME=hassio_supervisor/-e TZ=Asia\/Shanghai\ -e SUPERVISOR_NAME=hassio_supervisor/g' buildroot-external/rootfs-overlay/usr/sbin/hassos-supervisor
         #sed -i 's/\:\/cache/:\/cache\ -v\ \/etc\/resolv.conf:\/etc\/resolv.conf/g' scripts/enter.sh
         sed -i 's/homeassistant/itcommander/g' buildroot-external/configs/${{matrix.target}}_defconfig
@@ -106,8 +106,8 @@ jobs:
       run: |
         sleep $((RANDOM % 15))    
         cd HassOS
-        #sudo ./scripts/enter.sh make -j$(($(nproc) + 1)) ${{matrix.target}}
-        sudo ./scripts/entry.sh make ${{matrix.target}}
+        ./scripts/enter.sh make -j$(($(nproc) + 1)) ${{matrix.target}}
+        #sudo ./scripts/entry.sh make ${{matrix.target}}
 
     - name: Upload Firmware
       uses: actions/upload-artifact@main
