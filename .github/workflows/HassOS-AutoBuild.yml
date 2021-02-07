@@ -47,6 +47,7 @@ jobs:
         sudo timedatectl set-timezone "Asia/Shanghai"
         sudo rm -rf "/usr/local/share/boost"
         sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        sudo rm -rf /usr/share/
 
     - name: Clone source code  
       run: |
@@ -64,9 +65,9 @@ jobs:
         #sed -i '/set/a\set\ FORCE_UNSAFE_CONFIGURE=1' scripts/entry.sh
         sed -i 's/-e\ SUPERVISOR_NAME=hassio_supervisor/-e TZ=Asia\/Shanghai\ -e SUPERVISOR_NAME=hassio_supervisor/g' buildroot-external/rootfs-overlay/usr/sbin/hassos-supervisor
         #sed -i 's/\:\/cache/:\/cache\ -v\ \/etc\/resolv.conf:\/etc\/resolv.conf/g' scripts/enter.sh
-        sed -i '/vhdx/d' buildroot-external/scripts/hdd-image.sh
-        sed -i '/vdi/d' buildroot-external/scripts/hdd-image.sh
-        sed -i '/qcow2/d' buildroot-external/scripts/hdd-image.sh
+        #sed -i '/vhdx/d' buildroot-external/scripts/hdd-image.sh
+        #sed -i '/vdi/d' buildroot-external/scripts/hdd-image.sh
+        #sed -i '/qcow2/d' buildroot-external/scripts/hdd-image.sh
         sed -i 's/homeassistant/itcommander/g' buildroot-external/configs/${{matrix.target}}_defconfig
         sed -i 's/Welcome to Home Assistant/Welcome to Home Assistant (IT Commander YouTuBe Channle)/g' buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
