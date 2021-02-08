@@ -65,9 +65,12 @@ jobs:
         #sed -i '/set/a\set\ FORCE_UNSAFE_CONFIGURE=1' scripts/entry.sh
         sed -i 's/-e\ SUPERVISOR_NAME=hassio_supervisor/-e TZ=Asia\/Shanghai\ -e SUPERVISOR_NAME=hassio_supervisor/g' buildroot-external/rootfs-overlay/usr/sbin/hassos-supervisor
         #sed -i 's/\:\/cache/:\/cache\ -v\ \/etc\/resolv.conf:\/etc\/resolv.conf/g' scripts/enter.sh
-        #sed -i '/vhdx/d' buildroot-external/scripts/hdd-image.sh
-        #sed -i '/vdi/d' buildroot-external/scripts/hdd-image.sh
-        #sed -i '/qcow2/d' buildroot-external/scripts/hdd-image.sh
+        sed -i '/vhdx/d' buildroot-external/scripts/hdd-image.sh
+        sed -i '/vdi/d' buildroot-external/scripts/hdd-image.sh
+        sed -i '/qcow2/d' buildroot-external/scripts/hdd-image.sh
+        sed -i '/vhdx/d' buildroot-external/board/intel/ova/hassos-hook.sh
+        sed -i '/vdi/d' buildroot-external/board/intel/ova/hassos-hook.sh
+        sed -i '/qcow2/d' buildroot-external/board/intel/ova/hassos-hook.sh
         rm -rf buildroot-external/rootfs-overlay/etc/docker/.empty        
         curl -L https://sumju.net/daemon.json -o buildroot-external/rootfs-overlay/etc/docker/daemon.json
         sed -i 's/homeassistant/itcommander/g' buildroot-external/configs/${{matrix.target}}_defconfig
