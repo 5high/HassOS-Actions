@@ -68,6 +68,8 @@ jobs:
         #sed -i '/vhdx/d' buildroot-external/scripts/hdd-image.sh
         #sed -i '/vdi/d' buildroot-external/scripts/hdd-image.sh
         #sed -i '/qcow2/d' buildroot-external/scripts/hdd-image.sh
+        rm -rf buildroot-external/rootfs-overlay/etc/docker/.empty        
+        curl -L https://sumju.net/daemon.json -o buildroot-external/rootfs-overlay/etc/docker/daemon.json
         sed -i 's/homeassistant/itcommander/g' buildroot-external/configs/${{matrix.target}}_defconfig
         sed -i 's/Welcome to Home Assistant/Welcome to Home Assistant (IT Commander YouTuBe Channle)/g' buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
