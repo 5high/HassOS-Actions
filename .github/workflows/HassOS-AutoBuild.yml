@@ -72,7 +72,7 @@ jobs:
         sed -i '/vdi/d' buildroot-external/board/intel/ova/hassos-hook.sh
         #sed -i '/qcow2/d' buildroot-external/board/intel/ova/hassos-hook.sh
         rm -rf buildroot-external/rootfs-overlay/etc/docker/.empty        
-        curl -L https://sumju.net/daemon.json -o buildroot-external/rootfs-overlay/etc/docker/daemon.json
+        #curl -L https://sumju.net/daemon.json -o buildroot-external/rootfs-overlay/etc/docker/daemon.json
         sed -i 's/homeassistant/itcommander/g' buildroot-external/configs/${{matrix.target}}_defconfig
         sed -i 's/Welcome to Home Assistant/Welcome to Home Assistant (IT Commander YouTuBe Channle)/g' buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
@@ -91,8 +91,8 @@ jobs:
         echo "BR2_PACKAGE_TZDATA=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_PACKAGE_HTOP=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_PACKAGE_WGET=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        echo "BR2_PACKAGE_OPKG=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        echo "BR2_PACKAGE_OPKG_GPG_SIGN=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        #echo "BR2_PACKAGE_OPKG=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        #echo "BR2_PACKAGE_OPKG_GPG_SIGN=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_INFO=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         #echo "BR2_TARGET_ROOTFS_EXT2=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         #echo "BR2_TARGET_ROOTFS_EXT2_4=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
