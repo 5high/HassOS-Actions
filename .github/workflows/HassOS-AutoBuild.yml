@@ -94,9 +94,9 @@ jobs:
         #echo "BR2_PACKAGE_OPKG=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         #echo "BR2_PACKAGE_OPKG_GPG_SIGN=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_INFO=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        #echo "BR2_TARGET_ROOTFS_EXT2=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        #echo "BR2_TARGET_ROOTFS_EXT2_4=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        #echo "BR2_TARGET_ROOTFS_EXT2_SIZE=\"128M\"" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        echo "BR2_TARGET_ROOTFS_EXT2=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        echo "BR2_TARGET_ROOTFS_EXT2_4=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        echo "BR2_TARGET_ROOTFS_EXT2_SIZE=\"128M\"" >> buildroot-external/configs/${{matrix.target}}_defconfig
         #echo "BR2_PACKAGE_HOST_E2FSPROGS=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         #echo "BR2_PACKAGE_HOST_ZIP=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         #echo "BR2_PACKAGE_HOST_PARTED=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
