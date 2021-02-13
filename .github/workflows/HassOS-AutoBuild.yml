@@ -114,7 +114,7 @@ jobs:
       shell: 'script -q -e -c "bash {0}"'
       id: build
       run: |
-        sleep $((RANDOM % 15))    
+        sleep $((RANDOM % 60))    
         cd HassOS
         ./scripts/enter.sh make -j$(($(nproc) + 1)) ${{matrix.target}}
         #sudo ./scripts/entry.sh make ${{matrix.target}}
