@@ -40,7 +40,7 @@ jobs:
       
     - name: Initialization environment
       run: |
-        sudo echo "nameserver 1.1.1.1" > /run/systemd/resolve/resolv.conf
+        sudo echo "nameserver 1.1.1.1" > /etc/resolv.conf
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update
         sudo -E apt-get -qq autoremove --purge
