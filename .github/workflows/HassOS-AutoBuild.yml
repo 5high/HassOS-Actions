@@ -70,8 +70,8 @@ jobs:
         sed -i '/vhdx/d' buildroot-external/scripts/hdd-image.sh
         sed -i '/vdi/d' buildroot-external/scripts/hdd-image.sh
         #sed -i '/qcow2/d' buildroot-external/scripts/hdd-image.sh
-        sed -i '/vhdx/d' buildroot-external/board/intel/ova/hassos-hook.sh
-        sed -i '/vdi/d' buildroot-external/board/intel/ova/hassos-hook.sh
+        #sed -i '/vhdx/d' buildroot-external/board/intel/ova/hassos-hook.sh
+        #sed -i '/vdi/d' buildroot-external/board/intel/ova/hassos-hook.sh
         #sed -i '/qcow2/d' buildroot-external/board/intel/ova/hassos-hook.sh
         #rm -rf buildroot-external/rootfs-overlay/etc/docker/.empty        
         #curl -L https://sumju.net/daemon.json -o buildroot-external/rootfs-overlay/etc/docker/daemon.json
