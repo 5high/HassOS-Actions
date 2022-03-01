@@ -60,8 +60,8 @@ jobs:
     - name: Change Settings.
       run: |
         cd HassOS
-        sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' Dockerfile
-        sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' buildroot-external/package/hassio/builder/Dockerfile
+        #sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' Dockerfile
+        #sed -i 's/lists\/\*/lists\/*\ \&\& apt-get clean/g' buildroot-external/package/hassio/builder/Dockerfile
         sed -i 's/-e\ BUILDER_UID/-e TZ=Asia\/Shanghai\ -e BUILDER_UID/g' buildroot-external/package/hassio/hassio.mk 
         sed -i 's/-e\ BUILDER_UID/-e TZ=Asia\/Shanghai\ -e BUILDER_UID/g' scripts/enter.sh
         #sed -i '/set/a\set\ FORCE_UNSAFE_CONFIGURE=1' scripts/entry.sh
