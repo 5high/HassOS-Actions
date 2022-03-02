@@ -77,14 +77,14 @@ jobs:
         #curl -L https://sumju.net/daemon.json -o buildroot-external/rootfs-overlay/etc/docker/daemon.json
         sed -i 's/homeassistant/itcommander/g' buildroot-external/configs/${{matrix.target}}_defconfig
         sed -i 's/Welcome to Home Assistant/Welcome to Home Assistant (IT Commander YouTuBe Channle)/g' buildroot-external/configs/${{matrix.target}}_defconfig
-        echo "BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        #echo "BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_GENERIC_ROOT_PASSWD=\"\"" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_ROOTFS_SKELETON_DEFAULT=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_ENABLE_ROOT_LOGIN=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_HOST_LZO=n" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_PACKAGE_VIM=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        echo "BR2_PACKAGE_VIM_RUNTIME=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
-        echo "BR2_PACKAGE_NANO=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        #echo "BR2_PACKAGE_VIM_RUNTIME=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
+        #echo "BR2_PACKAGE_NANO=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_PACKAGE_NANO_TINY=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_PACKAGE_NTP=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_PACKAGE_NTP_SNTP=y" >> buildroot-external/configs/${{matrix.target}}_defconfig
