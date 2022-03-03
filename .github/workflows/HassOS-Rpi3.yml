@@ -1,4 +1,4 @@
-name: HassOS-AutoBuild
+name: HassOS-AutoBuild-Rpi3
 
 on:
 #  release:
