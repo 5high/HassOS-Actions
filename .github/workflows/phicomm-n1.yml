@@ -1,4 +1,4 @@
-name: HassOS-AutoBuild-x86_64
+name: HassOS-AutoBuild-Phicomm-n1
 
 on:
 #  release:
