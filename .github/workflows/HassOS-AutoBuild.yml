@@ -32,7 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [rpi3_64,rpi4_64,ova,generic_x86_64,generic_aarch64]
+        target: [rpi3_64,rpi4_64,ova,generic_x86_64,generic_aarch64,green,yellow]
 
     steps:
     - name: Checkout
@@ -125,7 +125,7 @@ jobs:
       uses: actions/upload-artifact@main
       with:
         name: ${{matrix.target}}_Firmware
-        path: HassOS/release
+        path: HassOS/output/images
     
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
