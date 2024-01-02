@@ -55,7 +55,7 @@ jobs:
         df -hT $PWD
         #dpkg-query -W --showformat='${Installed-Size} ${Package} ${Status}\n'|grep -v deinstall|sort -n|awk '{print $1" "$2}'
         #git clone https://github.com/home-assistant/operating-system.git -b master HassOS
-        git clone -b main https://github.com/home-assistant/operating-system.git -b dev HassOS
+        git clone -b main https://github.com/5high/operating-system.git -b dev HassOS
     
     - name: Change Settings.
       run: |
