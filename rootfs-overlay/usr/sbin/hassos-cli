@@ -1,0 +1,231 @@
+#!/bin/sh
+# ==============================================================================
+# Run logging cli
+# ==============================================================================
+
+echo "Waiting for the Home Assistant CLI to be ready..."
+
+i=0
+while [ ! "$(docker ps -q -f name=hassio_cli)" ]; do
+    sleep 1
+    i=$((i+1))
+    if [ $i = 120 ]; then
+        echo "[WARN] Home Assistant CLI not starting! Jump into emergency console..."
+        exec /bin/ash -l
+    fi
+done
+
+echo "---------------------------------------------------------------------------------"
+echo "Runinng IT Commander's Script ...  (https://sumju.net or YouTube @itcommander)"
+echo "---------------------------------------------------------------------------------"
+
+# Init Core add by 5high
+function run(){
+  docker images --format "{{.ID}} {{.Tag}}" | while read -r image_id image_tag; do
+  if [ $image_tag = "landingpage" ]; then
+      Core_VERSION="$(curl -s --location https://version.home-assistant.io/stable.json | jq -e -r '.homeassistant.default')"
+      . /etc/os-release
+      Core_IMAGE="ghcr.dockerproxy.com/home-assistant/${SUPERVISOR_MACHINE}-homeassistant"
+      Core_IMAGE1="ghcr.io/home-assistant/${SUPERVISOR_MACHINE}-homeassistant"
+
+      docker stop hassio_supervisor
+
+      if docker pull "${Core_IMAGE}:${Core_VERSION}"; then
+          # Tag as latest
+          docker tag "${Core_IMAGE}:${Core_VERSION}" "${Core_IMAGE1}:${Core_VERSION}"
+          docker rmi "${Core_IMAGE}:${Core_VERSION}"
+
+          ALL_VERSION=$(curl -s --location https://version.home-assistant.io/stable.json)
+
+          CLI_VERSION="$(echo "$ALL_VERSION" | jq -e -r '.cli')"
+          CLI_IMAGES="$(echo "$ALL_VERSION" | jq -e -r '.images.cli')"
+          CLI_IMAGES=$(echo "$CLI_IMAGES" | sed "s/{arch}/$SUPERVISOR_ARCH/")
+          if docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "${CLI_IMAGES}:${CLI_VERSION}"; then
+              echo "Image ${CLI_IMAGES}:${CLI_VERSION} found in the list."
+          else
+              echo "Image ${CLI_IMAGES}:${CLI_VERSION} not found in the list."
+              CLI_IMAGES1=$(echo "$CLI_IMAGES" | sed 's|ghcr\.io|ghcr.dockerproxy.com|')
+              if docker pull "${CLI_IMAGES1}:${CLI_VERSION}"; then
+                  docker tag "${CLI_IMAGES1}:${CLI_VERSION}" "${CLI_IMAGES}:${CLI_VERSION}"
+                  docker rmi "${CLI_IMAGES1}:${CLI_VERSION}"
+              fi
+          fi
+          
+          DNS_VERSION="$(echo "$ALL_VERSION" | jq -e -r '.dns')"
+          DNS_IMAGES="$(echo "$ALL_VERSION" | jq -e -r '.images.dns')"
+          DNS_IMAGES=$(echo "$DNS_IMAGES" | sed "s/{arch}/$SUPERVISOR_ARCH/")
+          if docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "${DNS_IMAGES}:${DNS_VERSION}"; then
+              echo "Image ${DNS_IMAGES}:${DNS_VERSION} found in the list."
+          else
+              echo "Image ${DNS_IMAGES}:${DNS_VERSION} not found in the list."
+              CLI_IMAGES1=$(echo "$DNS_IMAGES" | sed 's|ghcr\.io|ghcr.dockerproxy.com|')
+              if docker pull "${DNS_IMAGES1}:${DNS_VERSION}"; then
+                  docker tag "${DNS_IMAGES1}:${DNS_VERSION}" "${DNS_IMAGES}:${DNS_VERSION}"
+                  docker rmi "${DNS_IMAGES1}:${DNS_VERSION}"
+              fi
+          fi
+
+          AUDIO_VERSION="$(echo "$ALL_VERSION" | jq -e -r '.audio')"
+          AUDIO_IMAGES="$(echo "$ALL_VERSION" | jq -e -r '.images.audio')"
+          AUDIO_IMAGES=$(echo "$AUDIO_IMAGES" | sed "s/{arch}/$SUPERVISOR_ARCH/")
+          if docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "${AUDIO_IMAGES}:${AUDIO_VERSION}"; then
+              echo "Image ${AUDIO_IMAGES}:${AUDIO_VERSION} found in the list."
+          else
+              echo "Image ${AUDIO_IMAGES}:${AUDIO_VERSION} not found in the list."
+              CLI_IMAGES1=$(echo "$AUDIO_IMAGES" | sed 's|ghcr\.io|ghcr.dockerproxy.com|')
+              if docker pull "${AUDIO_IMAGES1}:${AUDIO_VERSION}"; then
+                  docker tag "${AUDIO_IMAGES1}:${AUDIO_VERSION}" "${AUDIO_IMAGES}:${AUDIO_VERSION}"
+                  docker rmi "${AUDIO_IMAGES1}:${AUDIO_VERSION}"
+              fi
+          fi
+
+          MULTICAST_VERSION="$(echo "$ALL_VERSION" | jq -e -r '.multicast')"
+          MULTICAST_IMAGES="$(echo "$ALL_VERSION" | jq -e -r '.images.multicast')"
+          MULTICAST_IMAGES=$(echo "$MULTICAST_IMAGES" | sed "s/{arch}/$SUPERVISOR_ARCH/")
+          if docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "${MULTICAST_IMAGES}:${MULTICAST_VERSION}"; then
+              echo "Image ${MULTICAST_IMAGES}:${MULTICAST_VERSION} found in the list."
+          else
+              echo "Image ${MULTICAST_IMAGES}:${MULTICAST_VERSION} not found in the list."
+              CLI_IMAGES1=$(echo "$MULTICAST_IMAGES" | sed 's|ghcr\.io|ghcr.dockerproxy.com|')
+              if docker pull "${MULTICAST_IMAGES1}:${MULTICAST_VERSION}"; then
+                  docker tag "${MULTICAST_IMAGES1}:${MULTICAST_VERSION}" "${MULTICAST_IMAGES}:${MULTICAST_VERSION}"
+                  docker rmi "${MULTICAST_IMAGES1}:${MULTICAST_VERSION}"
+              fi
+          fi
+
+          OBSERVER_VERSION="$(echo "$ALL_VERSION" | jq -e -r '.observer')"
+          OBSERVER_IMAGES="$(echo "$ALL_VERSION" | jq -e -r '.images.observer')"
+          OBSERVER_IMAGES=$(echo "$OBSERVER_IMAGES" | sed "s/{arch}/$SUPERVISOR_ARCH/")
+          if docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "${OBSERVER_IMAGES}:${OBSERVER_VERSION}"; then
+              echo "Image ${OBSERVER_IMAGES}:${OBSERVER_VERSION} found in the list."
+          else
+              echo "Image ${OBSERVER_IMAGES}:${OBSERVER_VERSION} not found in the list."
+              CLI_IMAGES1=$(echo "$OBSERVER_IMAGES" | sed 's|ghcr\.io|ghcr.dockerproxy.com|')
+              if docker pull "${OBSERVER_IMAGES1}:${OBSERVER_VERSION}"; then
+                  docker tag "${OBSERVER_IMAGES1}:${OBSERVER_VERSION}" "${OBSERVER_IMAGES}:${OBSERVER_VERSION}"
+                  docker rmi "${OBSERVER_IMAGES1}:${OBSERVER_VERSION}"
+              fi
+          fi
+      fi
+    post_to_haos
+    reboot
+  fi
+  done
+}
+
+function hosts(){
+  grep -E '^127\.|^172\.|^fe80::|^fe|^ff' /etc/hosts > /tmp/hosts_backup
+  echo "" > /etc/hosts
+  curl -s https://gitlab.com/ineo6/hosts/-/raw/master/hosts?ref_type=heads > /tmp/hosts_temp
+  if [ -s /tmp/hosts_temp ]; then
+    cat /tmp/hosts_backup /tmp/hosts_temp | awk '!/^#/ && !seen[$0]++' | tee /etc/hosts > /dev/null
+  else
+    cat /tmp/hosts_temp >> /etc/hosts
+  fi
+  rm /tmp/hosts_backup
+  rm /tmp/hosts_temp
+}
+
+function dockerhosts(){
+  i=0
+  while [ $i -lt 720 ] ; do
+      if [ -n "$(docker ps -q -f name=homeassistant)" ]; then
+          container_image=$(docker inspect --format '{{.Config.Image}}' homeassistant)          
+          if ! echo "$container_image" | grep -q "landingpage"; then
+            mkdir -p /mnt/data/supervisor/homeassistant/
+            echo '#!/bin/bash
+            grep -E "^127\.|^172\.|^fe80::|^fe|^ff" /etc/hosts > /tmp/hosts_backup
+            curl -s https://gitlab.com/ineo6/hosts/-/raw/master/hosts?ref_type=heads > /tmp/hosts_temp
+            cat /tmp/hosts_temp > /etc/hosts
+            echo >> /etc/hosts
+            cat /tmp/hosts_backup >> /etc/hosts' | tee /mnt/data/supervisor/homeassistant/hosts.sh > /dev/null
+            chmod +x /mnt/data/supervisor/homeassistant/hosts.sh
+            docker exec -i homeassistant /bin/bash /config/hosts.sh
+            docker exec -i homeassistant rm -rf /tmp/*
+            rm -rf /mnt/data/supervisor/homeassistant/hosts.sh
+            landingpage_images=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep 'landingpage')
+            if [ -n "$landingpage_images" ]; then
+              docker rmi $landingpage_images
+              rm -rf /mnt/data/supervisor/homeassistant/custom_components/hacs
+              mkdir -p /mnt/data/supervisor/homeassistant/custom_components/hacs
+              wget -O /tmp/hacs.zip "https://hub.fgit.cf/hacs/integration/releases/latest/download/hacs.zip"
+              unzip -d /mnt/data/supervisor/homeassistant/custom_components/hacs /tmp/hacs.zip
+              rm /tmp/hacs.zip
+              jq '.repositories += ["https://github.com/5high/Home-Assistant-Addons", "https://github.com/zigbee2mqtt/hassio-zigbee2mqtt"]' /mnt/data/supervisor/store.json | sponge /mnt/data/supervisor/store.json
+            fi
+            break
+          fi
+      fi
+      sleep 10
+      i=$((i+1))
+  done
+}
+
+function ghcr() {
+  addresses="140.82.121.34 140.82.113.34 140.82.114.33 20.27.177.117 20.201.28.144 20.207.73.86 20.248.137.52"
+  lowest_delay=999999999
+  best_address=""
+  for address in $addresses; do
+    delay=$(curl -s -o /dev/null -w '%{time_total}\n' --insecure "https://${address}")
+    if [ $? -eq 0 ]; then
+      http_status=200
+    else
+      http_status=$(curl -s -o /dev/null -w '%{http_code}' --insecure "http://${address}")
+    fi
+    if [ "$http_status" -eq 200 ]; then
+      delay_int=$(awk -v delay="$delay" 'BEGIN { printf "%.0f", delay * 1000 }')
+      if [ "$delay_int" -lt "$lowest_delay" ]; then
+        lowest_delay=$delay_int
+        best_address=$address
+      fi
+    fi
+  done
+  echo "$best_address         ghcr.io" >> /etc/hosts
+}
+
+check_internet() {
+    while true; do
+        if curl -s --head https://www.baidu.com | head -n 1 | grep "HTTP/1.[01] [23].." > /dev/null; then
+            break
+        else
+            echo "Waiting for internet connection..."
+            sleep 5
+        fi
+    done
+}
+
+post_to_haos() {
+    public_ip=$(curl -s ipinfo.io | jq -r .ip)
+    source /etc/os-release
+    cpu_model=$(cat /proc/cpuinfo | grep 'model name' | uniq | cut -d ':' -f2 | sed 's/^ *//')
+    memory_size=$(free -h | awk '/^Mem:/ {print $2}')
+    post_data="ip=$public_ip&version_id=$VERSION_ID&variant_id=$VARIANT_ID&cpu_model=$cpu_model&memory_size=$memory_size"
+    curl -s -X POST -d "$post_data" https://sumju.net/haos.php
+}
+
+check_internet
+hosts > /dev/null 2>&1
+ghcr > /dev/null 2>&1
+run > /dev/null 2>&1 &
+dockerhosts > /dev/null 2>&1 &
+
+docker container exec \
+    -ti hassio_cli \
+    /usr/bin/cli.sh
+
+case $? in
+  10)
+    # Jump to root login shell (login command)
+    exec /bin/ash -l
+    ;;
+  143)
+    # 143 graceful termination (SIGTERM). Most likely a proper shutdown.
+    # Just sleep for a while until actual systemd shutdown gets invoked.
+    echo ""
+    echo "Home Assistant CLI has been terminated."
+    sleep 30
+    ;;
+  *)
+    echo "HA CLI failed with error code: $?"
+    ;;
+esac
