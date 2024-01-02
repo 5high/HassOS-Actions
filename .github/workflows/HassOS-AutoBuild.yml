@@ -59,7 +59,7 @@ jobs:
  
     - name: Change Settings.
       run: |
-	cp -r HassOS-Actions/rootfs-overlay HassOS/buildroot-external/
+        cp -r rootfs-overlay HassOS/buildroot-external
         cd HassOS
         sed -i 's/-e\ BUILDER_UID/-e TZ=Asia\/Shanghai\ -e BUILDER_UID/g' buildroot-external/package/hassio/hassio.mk 
         sed -i 's/-e\ BUILDER_UID/-e TZ=Asia\/Shanghai\ -e BUILDER_UID/g' scripts/enter.sh
