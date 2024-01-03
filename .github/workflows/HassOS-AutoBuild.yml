@@ -111,11 +111,19 @@ jobs:
         name: ${{matrix.target}}_Firmware
         path: HassOS/output/images
         
-    - name: Upload binaries to release
+    - name: Upload images to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: HassOS/output/images/haos_*.xz
+        asset_name: ${{ matrix.asset_name }}
+        tag: ${{ github.ref }}
+    
+    - name: Upload raucb to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: HassOS/output/images/haos_*.raucb
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
         
