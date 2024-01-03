@@ -109,6 +109,9 @@ jobs:
         name: ${{matrix.target}}_Firmware
         path: HassOS/output/images
         
+    - name: 列出文件
+      run: ls -R HassOS/output/images/
+
     - name: Upload images to release
       uses: svenstaro/upload-release-action@v2
       with:
