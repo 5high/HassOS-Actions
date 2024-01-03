@@ -21,8 +21,8 @@ on:
 
 env:
   RUN_VALIDATION: true
-  TG: echo ${{matrix.target}} | tr '_' '-'
-  VER: curl -q https://version.home-assistant.io/stable.json | jq -r '.hassos."$TG"'
+  TG: $(echo ${{matrix.target}} | tr '_' '-')
+  VER: $(curl -q https://version.home-assistant.io/stable.json | jq -r '.hassos."$TG"')
 
 jobs:
   build:
