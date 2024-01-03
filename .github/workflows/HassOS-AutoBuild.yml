@@ -128,7 +128,9 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: HassOS/output/images/haos_*.raucb
         asset_name: ${{ matrix.asset_name }}
-        tag: ${{ github.ref }}
+        tag: ${{ github.ref }}}
+        overwrite: true
+        file_glob: true
         
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
