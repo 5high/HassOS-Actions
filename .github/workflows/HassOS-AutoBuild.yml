@@ -119,6 +119,8 @@ jobs:
         file: HassOS/output/images/haos_*.xz
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
+        overwrite: true
+        file_glob: true
     
     - name: Upload raucb to release
       uses: svenstaro/upload-release-action@v2
