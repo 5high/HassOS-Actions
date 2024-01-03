@@ -32,7 +32,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [rpi3_64,rpi4_64,ova,generic_x86_64,generic_aarch64,green,yellow]
+        #target: [rpi3_64,rpi4_64,ova,generic_x86_64,generic_aarch64,green,yellow]
+        target: [rpi3_64]
 
     steps:
     - name: Checkout
@@ -102,8 +103,6 @@ jobs:
         cd HassOS
         ./scripts/enter.sh make -j$(($(nproc) + 1)) ${{matrix.target}}
         #sudo ./scripts/entry.sh make ${{matrix.target}}
-         df -hT $PWD
-         ls  HassOS/output/images
 
     - name: Upload Firmware
       uses: actions/upload-artifact@main
