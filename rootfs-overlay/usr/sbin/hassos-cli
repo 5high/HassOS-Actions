@@ -149,8 +149,8 @@ function dockerhosts(){
               rm -rf /mnt/data/supervisor/homeassistant/custom_components/hacs
               mkdir -p /mnt/data/supervisor/homeassistant/custom_components/hacs
               wget -O /tmp/hacs.zip "https://hub.fgit.cf/hacs/integration/releases/latest/download/hacs.zip"
-              zip -r /tmp/hacs.zip /mnt/data/supervisor/homeassistant/custom_components/hacs
-              rm /tmp/hacs.zip
+              unzip -d /mnt/data/supervisor/homeassistant/custom_components/hacs /tmp/hacs.zip
+              rm -rf /tmp/hacs.zip
               jq '.repositories += ["https://github.com/5high/Home-Assistant-Addons", "https://github.com/zigbee2mqtt/hassio-zigbee2mqtt"]' /mnt/data/supervisor/store.json | sponge /mnt/data/supervisor/store.json
             fi
             break
