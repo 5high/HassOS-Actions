@@ -21,6 +21,8 @@ on:
 
 env:
   RUN_VALIDATION: true
+  TG: echo ${{matrix.target}} | tr '_' '-'
+  VER: curl -q https://version.home-assistant.io/stable.json | jq -r '.hassos."$TG"'
 
 jobs:
   build:
@@ -115,7 +117,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: HassOS/output/images/haos_${{matrix.target}}*.xz
+        file: HassOS/output/images/haos_${{matrix.target}}-$ver*.xz
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
         
