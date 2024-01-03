@@ -54,8 +54,6 @@ jobs:
     - name: Clone source code  
       run: |
         df -hT $PWD
-        echo $TG
-        echo $VER
         #dpkg-query -W --showformat='${Installed-Size} ${Package} ${Status}\n'|grep -v deinstall|sort -n|awk '{print $1" "$2}'
         git clone https://github.com/home-assistant/operating-system.git -b main HassOS
         #git clone -b main https://github.com/5high/operating-system.git -b dev HassOS
