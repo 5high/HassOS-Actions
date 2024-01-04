@@ -121,7 +121,7 @@ jobs:
         file: HassOS/output/images/haos_*
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
-        overwirte: true
+        overwrite: true
         file_glob: true
     
     - name: Delete workflow runs
