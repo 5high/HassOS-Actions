@@ -116,7 +116,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: HassOS/output/images/haos_*.xz
+        file: ”HassOS/output/images/haos_*“
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
         overwrite: true
@@ -126,7 +126,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: HassOS/output/images/haos_*.raucb
+        file: ”HassOS/output/images/haos_*.raucb“
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}}
         overwrite: true
