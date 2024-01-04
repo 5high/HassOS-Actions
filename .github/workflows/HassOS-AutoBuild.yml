@@ -3,7 +3,9 @@ name: HassOS-AutoBuild
 on:
 #  release:
 #    types: [published]
-  #push:
+  push:
+    tags:
+     - '*'
   #  branches:
   #    - main
   #  paths:
@@ -116,18 +118,12 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: HassOS/output/images/haos_*.*
+        file: HassOS/output/images/haos_*
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
+        overwirte: true
+        file_glob: true
     
-    - name: Upload raucb to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: HassOS/output/images/haos_*.raucb
-        asset_name: ${{ matrix.asset_name }}
-        tag: ${{ github.ref }}}
-        
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
       with:
