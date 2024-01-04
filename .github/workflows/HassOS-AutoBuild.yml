@@ -119,8 +119,6 @@ jobs:
         file: HassOS/output/images/haos_*.*
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
-        overwrite: true
-        file_glob: true
     
     - name: Upload raucb to release
       uses: svenstaro/upload-release-action@v2
@@ -129,8 +127,6 @@ jobs:
         file: HassOS/output/images/haos_*.raucb
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}}
-        overwrite: true
-        file_glob: true
         
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
