@@ -4,6 +4,11 @@
 每周六凌晨自动编译最新的stable版本HassOS    
 提供Green，Yellow和树莓派系列以及虚拟机镜像下载
 
+# Home Assistant Green 优惠卷地址
+
+[Home Assistant Green 40元优惠卷](http://mtw.so/5xJZXF)  
+[SkyConnect 20元优惠卷](http://mtw.so/6vTGv2)
+
 # 固件特点
 
 1. 增加HTOP和VIM，NANO命令。
@@ -26,7 +31,3 @@
 电报频道    :https://t.me/itcommander   
 Twitter    :https://twitter.com/itcommander2   
 Facebook   :https://www.facebook.com/itcommander.itcommander.1
-
-# Home Assistant Green 官方优惠卷地址
-[Home Assistant Green 40元优惠卷](http://mtw.so/5xJZXF)  
-[SkyConnect 20元优惠卷](http://mtw.so/6vTGv2)
