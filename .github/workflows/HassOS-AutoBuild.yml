@@ -48,6 +48,7 @@ jobs:
     - name: Check Version Exsist
       run: |
         all_tags=$(git tag -l)
+        echo $all_tags
         if [[ $all_tags == *"${{ env.HASSOS_VERSION }}"* ]]; then
           echo "Tag with ${{ env.HASSOS_VERSION }} found. Exiting workflow."
         fi
