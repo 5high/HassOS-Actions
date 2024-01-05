@@ -45,13 +45,12 @@ jobs:
         ver=$(curl -s https://version.home-assistant.io/stable.json | jq -r '.hassos."ova"')
         echo "HASSOS_VERSION=${ver}" >> $GITHUB_ENV
         
-    - name: Check Version Exsist
+    - name: Set env
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+    - name: Test
       run: |
-        all_tags=$(git tag -l)
-        echo $all_tags
-        if [[ $all_tags == *"${{ env.HASSOS_VERSION }}"* ]]; then
-          echo "Tag with ${{ env.HASSOS_VERSION }} found. Exiting workflow."
-        fi
+        echo $RELEASE_VERSION
+        echo ${{ env.RELEASE_VERSION }}
         
     - name: Initialization environment
       run: |
