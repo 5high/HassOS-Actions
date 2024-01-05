@@ -140,6 +140,11 @@ jobs:
         file_glob: true
         body: "针对大陆地区网络专门优化的HassOS版本，欢迎关注Youtube 频道 https://youtube.com/@itcommander ， 博客地址https://sumju.net"
     
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '16'
+
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
       with:
