@@ -6,8 +6,8 @@
 
 # Home Assistant Green 优惠卷地址
 
-[Home Assistant Green 40元优惠卷](https://sumju.net/?p=7943){:target="_blank"}   
-[SkyConnect 20元优惠卷](https://sumju.net/?p=7943){:target="_blank"}  
+[Home Assistant Green 40元优惠卷](https://sumju.net/?p=7943)   
+[SkyConnect 20元优惠卷](https://sumju.net/?p=7943)  
 
 # 固件特点
 
