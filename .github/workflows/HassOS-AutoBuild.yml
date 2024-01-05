@@ -130,6 +130,7 @@ jobs:
     #     path: HassOS/output/images
 
     - name: Upload images to release
+      id: upload-release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
