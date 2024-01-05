@@ -39,6 +39,19 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       
+    - name: Get HassOS version
+      id: get_hassos_version
+      run: |
+        ver=$(curl -s https://version.home-assistant.io/stable.json | jq -r '.hassos."ova"')
+        echo "HASSOS_VERSION=${ver}" >> $GITHUB_ENV
+        
+    - name: Check Version Exsist
+      run: |
+        all_tags=$(git tag -l)
+        if [[ $all_tags == *"${{ env.HASSOS_VERSION }}"* ]]; then
+          echo "Tag with HASSOS_VERSION found. Exiting workflow."
+        fi
+        
     - name: Initialization environment
       run: |
         #sudo echo "nameserver 1.1.1.1" >> /etc/hosts
@@ -95,15 +108,6 @@ jobs:
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        
-    - name: Get HassOS version
-      id: get_hassos_version
-      run: |
-        ver=$(curl -s https://version.home-assistant.io/stable.json | jq -r '.hassos."ova"')
-        echo "HASSOS_VERSION=${ver}" >> $GITHUB_ENV
-    
-    - name: Use HassOS version
-      run: echo "HassOS version is $HASSOS_VERSION"
 
     - name: Build
       shell: 'script -q -e -c "bash {0}"'
