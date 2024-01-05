@@ -136,7 +136,7 @@ jobs:
         tag: HassOS-${{ steps.get_hassos_version.outputs.version }}-大陆地区优化版本-${{ steps.current_date.outputs.date }}编译
         overwrite: true
         file_glob: true
-        body: "针对大陆地区网络专门优化的HassOS版本，欢迎关注Youtube 频道 @itcommander ， 博客地址https://sumju.net"
+        body: "针对大陆地区网络专门优化的HassOS版本，欢迎关注Youtube 频道 https://youtube.com/@itcommander ， 博客地址https://sumju.net"
     
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
