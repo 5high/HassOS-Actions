@@ -147,7 +147,7 @@ jobs:
         node-version: '16'
 
     - name: Delete workflow runs
-      uses: GitRML/delete-workflow-runs@main
+      uses: 5high/delete-workflow-runs@main
       with:
         retain_days: 1
         keep_minimum_runs: 1
