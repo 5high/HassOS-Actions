@@ -57,6 +57,7 @@ jobs:
         #dpkg-query -W --showformat='${Installed-Size} ${Package} ${Status}\n'|grep -v deinstall|sort -n|awk '{print $1" "$2}'
         git clone https://github.com/home-assistant/operating-system.git -b main HassOS
         #git clone -b main https://github.com/5high/operating-system.git -b dev HassOS
+        ver=$(curl -q https://version.home-assistant.io/stable.json | jq -r '.hassos."ova"')
  
     - name: Change Settings.
       run: |
@@ -96,6 +97,15 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         
+    - name: Get HassOS version
+      id: get_hassos_version
+      run: |
+        ver=$(curl -s https://version.home-assistant.io/stable.json | jq -r '.hassos."ova"')
+        echo "::set-output name=version::${ver}"
+
+    - name: Use HassOS version
+      run: echo "HassOS version is ${{ steps.get_hassos_version.outputs.version }}"
+
     - name: Build
       shell: 'script -q -e -c "bash {0}"'
       id: build
@@ -104,15 +114,19 @@ jobs:
         cd HassOS
         ./scripts/enter.sh make -j$(($(nproc) + 1)) ${{matrix.target}}
         #sudo ./scripts/entry.sh make ${{matrix.target}}
-
-    - name: Upload Firmware
-      uses: actions/upload-artifact@main
-      with:
-        name: ${{matrix.target}}_Firmware
-        path: HassOS/output/images
         
-    - name: 列出文件
-      run: ls -R HassOS/output/images/
+    - name: Get current date
+      id: current_date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+    
+    - name: Use current date
+      run: echo "Current date is ${{ steps.current_date.outputs.date }}"
+
+    # - name: Upload Firmware
+    #   uses: actions/upload-artifact@main
+    #   with:
+    #     name: ${{matrix.target}}_Firmware
+    #     path: HassOS/output/images
 
     - name: Upload images to release
       uses: svenstaro/upload-release-action@v2
@@ -120,9 +134,10 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: HassOS/output/images/haos_*
         asset_name: ${{ matrix.asset_name }}
-        tag: ${{ github.ref }}
+        tag: HassOS-${{ steps.get_hassos_version.outputs.version }}-大陆地区优化版本-${{ steps.current_date.outputs.date }}编译
         overwrite: true
         file_glob: true
+        body: "针对大陆地区网络专门优化的HassOS版本，欢迎关注Youtube 频道 @itcommander ， 博客地址https://sumju.net"
     
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
@@ -131,9 +146,16 @@ jobs:
         keep_minimum_runs: 1
 
     - name: Remove old Releases
-      uses: dev-drprasad/delete-older-releases@v0.1.0
+      uses: dev-drprasad/delete-older-releases@v0.3.2
       with:
         keep_latest: 3
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Notify on Telegram
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_CHAT_ID }}
+        token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        message: "New release! Download it [here](${{ steps.upload-release.outputs.browser_download_url }})."
