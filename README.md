@@ -28,5 +28,5 @@ Twitter    :https://twitter.com/itcommander2
 Facebook   :https://www.facebook.com/itcommander.itcommander.1
 
 # Home Assistant Green 官方优惠卷地址
-[Home Assistant Green 40元优惠卷](http://mtw.so/5xJZXF)
+[Home Assistant Green 40元优惠卷](http://mtw.so/5xJZXF)  
 [SkyConnect 20元优惠卷](http://mtw.so/6vTGv2)
