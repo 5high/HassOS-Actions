@@ -136,7 +136,7 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: HassOS/output/images/haos_*
         asset_name: ${{ matrix.asset_name }}
-        tag: HassOS-$HASSOS_VERSION-大陆地区优化版本-$CURRENT_DATE编译
+        tag: HassOS-${{ env.HASSOS_VERSION }}-大陆地区优化版本-${{ env.CURRENT_DATE }}编译
         overwrite: true
         file_glob: true
         body: "针对大陆地区网络专门优化的HassOS版本，欢迎关注Youtube 频道 https://youtube.com/@itcommander ， 博客地址https://sumju.net"
