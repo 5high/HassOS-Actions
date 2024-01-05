@@ -49,7 +49,7 @@ jobs:
       run: |
         all_tags=$(git tag -l)
         if [[ $all_tags == *"${{ env.HASSOS_VERSION }}"* ]]; then
-          echo "Tag with HASSOS_VERSION found. Exiting workflow."
+          echo "Tag with ${{ env.HASSOS_VERSION }} found. Exiting workflow."
         fi
         
     - name: Initialization environment
