@@ -136,7 +136,7 @@ jobs:
         tag: HassOS-${{ env.HASSOS_VERSION }}-大陆地区优化版本-${{ env.CURRENT_DATE }}编译
         overwrite: true
         file_glob: true
-        body: "针对大陆地区网络专门优化的HassOS版本.  欢迎关注Youtube 频道 https://youtube.com/@itcommander.  博客地址https://sumju.net".  官方硬件优惠卷领取https://sumju.net/?p=7943
+        body: "针对大陆地区网络专门优化的HassOS版本.\n欢迎关注Youtube 频道 https://youtube.com/@itcommander.\n博客地址https://sumju.net".\n官方硬件优惠卷领取https://sumju.net/?p=7943
     
     - name: Set up Node.js
       uses: actions/setup-node@v4
