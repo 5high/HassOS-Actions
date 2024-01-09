@@ -12,7 +12,7 @@ set -e
 SUPERVISOR_DATA=/mnt/data/supervisor
 SUPERVISOR_STARTUP_MARKER="/run/supervisor/startup-marker"
 SUPERVISOR_STARTSCRIPT_VERSION="/mnt/data/.hassos-supervisor-version"
-SUPERVISOR_IMAGE="ghcr.dockerproxy.com/home-assistant/${SUPERVISOR_ARCH}-hassio-supervisor"
+SUPERVISOR_IMAGE="ghcr.nju.edu.cn/home-assistant/${SUPERVISOR_ARCH}-hassio-supervisor"
 SUPERVISOR_IMAGE1="ghcr.io/home-assistant/${SUPERVISOR_ARCH}-hassio-supervisor"
 
 SUPERVISOR_IMAGE_ID=$(docker images --no-trunc --filter "reference=${SUPERVISOR_IMAGE1}:latest" --format "{{.ID}}" || echo "")
