@@ -10,7 +10,7 @@
     "deprecated-key-path": "/mnt/overlay/etc/docker/key.json",
     "bip": "172.30.232.1/23",
     "registry-mirrors": [
-	"https://docker.nju.edu.cn/"，
+	"https://docker.nju.edu.cn/",
 	"https://kfwkfulq.mirror.aliyuncs.com",
 	"https://2lqq34jg.mirror.aliyuncs.com",
 	"https://pee6w651.mirror.aliyuncs.com",
