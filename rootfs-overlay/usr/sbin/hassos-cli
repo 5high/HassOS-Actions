@@ -112,7 +112,7 @@ function run(){
   else
     json_file="/mnt/data/supervisor/store.json"
     temp_file="/tmp/store_temp.json"
-    new_repositories="https://hub.fgit.cf/5high/Home-Assistant-Addons https://hub.fgit.cf/zigbee2mqtt/hassio-zigbee2mqtt"    
+    new_repositories="https://hub.fgit.cf/5high/Home-Assistant-Addons https://hub.fgit.cf/zigbee2mqtt/hassio-zigbee2mqtt https://hub.fgit.cf/home-assistant/addons https://hub.fgit.cf/hassio-addons/repository"    
     if [ -e "$json_file" ]; then
         existing_repositories=$(jq -r '.repositories[]' "$json_file")
         for repo in $new_repositories; do
