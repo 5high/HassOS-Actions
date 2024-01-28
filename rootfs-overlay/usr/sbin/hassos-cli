@@ -165,6 +165,7 @@ function dockerhosts(){
             chmod +x /mnt/data/supervisor/homeassistant/hosts.sh
             docker exec -i homeassistant /bin/bash /config/hosts.sh
             docker exec -i homeassistant rm -rf /tmp/*
+            docker exec -i hassio_supervisor /bin/bash /data/homeassistant/hosts.sh
             rm -rf /mnt/data/supervisor/homeassistant/hosts.sh
             landingpage_images=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep 'landingpage')
             if [ -n "$landingpage_images" ]; then
