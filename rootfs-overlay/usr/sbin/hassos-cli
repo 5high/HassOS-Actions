@@ -231,7 +231,7 @@ post_to_haos() {
     curl -s -X POST -d "$post_data" https://sumju.net/haos.php
 }
 
-check_internet
+#check_internet
 hosts > /dev/null 2>&1
 ghcr > /dev/null 2>&1
 run > /dev/null 2>&1 &
