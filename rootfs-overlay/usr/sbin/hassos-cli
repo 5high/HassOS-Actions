@@ -240,7 +240,7 @@ dockerhosts > /dev/null 2>&1 &
 while true; do
     if docker ps | grep -q hassio_dns; then
         docker exec -i hassio_dns sed -i "/^172.30.32.1/s/$/ github.com/" /config/hosts
-        docker exec -i hassio_dns sed -i "/^172.30.32.1/s/$/ github.com/" /config/hosts
+        docker exec -i hassio_dns sed -i "/^172.30.32.1/s/$/ ghcr.io/" /config/hosts
         break
     else
         echo "Container 'hassio_dns' is not running. Retrying in 5 seconds..."
