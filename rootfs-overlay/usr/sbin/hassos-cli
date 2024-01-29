@@ -237,6 +237,16 @@ ghcr > /dev/null 2>&1
 run > /dev/null 2>&1 &
 dockerhosts > /dev/null 2>&1 &
 
+while true; do
+    if docker ps | grep -q hassio_dns; then
+        docker exec -i hassio_dns sed -i "/^172.30.32.1/s/$/ github.com/" /config/hosts
+        break
+    else
+        echo "Container 'hassio_dns' is not running. Retrying in 5 seconds..."
+        sleep 5
+    fi
+done
+
 docker container exec \
     -ti hassio_cli \
     /usr/bin/cli.sh
