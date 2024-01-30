@@ -1,0 +1,10 @@
+{
+  "repositories": [
+    "https://github.com/5high/Home-Assistant-Addons",
+    "https://github.com/zigbee2mqtt/hassio-zigbee2mqtt",
+    "https://github.com/hassio-addons/repository",
+    "https://github.com/esphome/home-assistant-addon",
+    "core",
+    "local"
+  ]
+}
