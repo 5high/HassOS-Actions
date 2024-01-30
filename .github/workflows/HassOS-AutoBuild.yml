@@ -25,6 +25,7 @@ env:
   RUN_VALIDATION: true
 
 jobs:
+  runs-on: self-hosted
   build:
     runs-on: ubuntu-20.04
     if: github.event.repository.owner.id == github.event.sender.id
