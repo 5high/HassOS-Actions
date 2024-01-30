@@ -136,76 +136,6 @@ function run(){
   done
 }
 
-function hosts(){
-  grep -E '^127\.|^172\.|^fe80::|^fe|^ff' /etc/hosts > /tmp/hosts_backup
-  echo "" > /etc/hosts
-  curl -s https://gitlab.com/ineo6/hosts/-/raw/master/hosts?ref_type=heads > /tmp/hosts_temp
-  if [ -s /tmp/hosts_temp ]; then
-    cat /tmp/hosts_backup /tmp/hosts_temp | awk '!/^#/ && !seen[$0]++' | tee /etc/hosts > /dev/null
-  else
-    cat /tmp/hosts_temp >> /etc/hosts
-  fi
-  rm /tmp/hosts_backup
-  rm /tmp/hosts_temp
-}
-
-function dockerhosts(){
-  i=0
-  while [ $i -lt 720 ] ; do
-      if [ -n "$(docker ps -q -f name=homeassistant)" ]; then
-          container_image=$(docker inspect --format '{{.Config.Image}}' homeassistant)          
-          if ! echo "$container_image" | grep -q "landingpage"; then
-            mkdir -p /mnt/data/supervisor/homeassistant/
-            echo '#!/bin/bash
-            grep -E "^127\.|^172\.|^fe80::|^fe|^ff" /etc/hosts > /tmp/hosts_backup
-            curl -s https://gitlab.com/ineo6/hosts/-/raw/master/hosts?ref_type=heads > /tmp/hosts_temp
-            cat /tmp/hosts_temp > /etc/hosts
-            echo >> /etc/hosts
-            cat /tmp/hosts_backup >> /etc/hosts' | tee /mnt/data/supervisor/homeassistant/hosts.sh > /dev/null
-            chmod +x /mnt/data/supervisor/homeassistant/hosts.sh
-            docker exec -i homeassistant /bin/bash /config/hosts.sh
-            docker exec -i homeassistant rm -rf /tmp/*
-            docker exec -i hassio_supervisor /bin/bash /data/homeassistant/hosts.sh
-            rm -rf /mnt/data/supervisor/homeassistant/hosts.sh
-            landingpage_images=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep 'landingpage')
-            if [ -n "$landingpage_images" ]; then
-              docker rmi $landingpage_images
-              rm -rf /mnt/data/supervisor/homeassistant/custom_components/hacs
-              mkdir -p /mnt/data/supervisor/homeassistant/custom_components/hacs
-              wget -O /tmp/hacs.zip "https://hub.fgit.cf/hacs/integration/releases/latest/download/hacs.zip"
-              unzip -d /mnt/data/supervisor/homeassistant/custom_components/hacs /tmp/hacs.zip
-              rm -rf /tmp/hacs.zip
-            fi
-            break
-          fi
-      fi
-      sleep 10
-      i=$((i+1))
-  done
-}
-
-function ghcr() {
-  addresses="140.82.121.34 140.82.113.34 140.82.114.33 20.27.177.117 20.201.28.144 20.207.73.86 20.248.137.52"
-  lowest_delay=999999999
-  best_address=""
-  for address in $addresses; do
-    delay=$(curl -s -o /dev/null -w '%{time_total}\n' --insecure "https://${address}")
-    if [ $? -eq 0 ]; then
-      http_status=200
-    else
-      http_status=$(curl -s -o /dev/null -w '%{http_code}' --insecure "http://${address}")
-    fi
-    if [ "$http_status" -eq 200 ]; then
-      delay_int=$(awk -v delay="$delay" 'BEGIN { printf "%.0f", delay * 1000 }')
-      if [ "$delay_int" -lt "$lowest_delay" ]; then
-        lowest_delay=$delay_int
-        best_address=$address
-      fi
-    fi
-  done
-  echo "$best_address         ghcr.io" >> /etc/hosts
-}
-
 check_internet() {
     for i in $(seq 1 12); do
         if curl -s --head https://www.baidu.com | head -n 1 | grep "HTTP/1.[01] [23].." > /dev/null; then
@@ -231,11 +161,8 @@ post_to_haos() {
     curl -s -X POST -d "$post_data" https://sumju.net/haos.php
 }
 
-#check_internet
-#hosts > /dev/null 2>&1
-#ghcr > /dev/null 2>&1
-#run > /dev/null 2>&1 &
-#dockerhosts > /dev/null 2>&1 &
+check_internet
+run > /dev/null 2>&1 &
 
 #while true; do
 #    if docker ps | grep -q hassio_dns; then
