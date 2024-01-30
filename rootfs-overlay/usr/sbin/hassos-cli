@@ -232,13 +232,14 @@ post_to_haos() {
 }
 
 #check_internet
-hosts > /dev/null 2>&1
-ghcr > /dev/null 2>&1
-run > /dev/null 2>&1 &
-dockerhosts > /dev/null 2>&1 &
+#hosts > /dev/null 2>&1
+#ghcr > /dev/null 2>&1
+#run > /dev/null 2>&1 &
+#dockerhosts > /dev/null 2>&1 &
 
 while true; do
     if docker ps | grep -q hassio_dns; then
+        sleep 10
         docker exec -i hassio_dns sed -i "/^172.30.32.1/s/$/ github.com/" /config/hosts
         docker exec -i hassio_dns sed -i "/^172.30.32.1/s/$/ ghcr.io/" /config/hosts
         break
