@@ -161,8 +161,8 @@ post_to_haos() {
     curl -s -X POST -d "$post_data" https://sumju.net/haos.php
 }
 
-check_internet
-run > /dev/null 2>&1 &
+#check_internet
+#run > /dev/null 2>&1 &
 
 #while true; do
 #    if docker ps | grep -q hassio_dns; then
