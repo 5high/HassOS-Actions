@@ -23,7 +23,7 @@ echo "--------------------------------------------------------------------------
 function run(){
   docker images --format "{{.ID}} {{.Tag}}" | while read -r image_id image_tag; do
   if [ $image_tag = "landingpage" ]; then
-      Core_VERSION="$(curl -s --location https://version.home-assistant.io/stable.json | jq -e -r '.homeassistant.default')"
+      Core_VERSION="$(curl -s -k --location https://version.home-assistant.io/stable.json | jq -e -r '.homeassistant.default')"
       . /etc/os-release
       Core_IMAGE="ghcr.nju.edu.cn/home-assistant/${SUPERVISOR_MACHINE}-homeassistant"
       Core_IMAGE1="ghcr.io/home-assistant/${SUPERVISOR_MACHINE}-homeassistant"
