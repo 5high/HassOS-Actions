@@ -45,7 +45,7 @@ check_internet() {
 
 post_to_haos() {
     add_repositories
-    public_ip=$(curl -s ipinfo.io | jq -r .ip)
+    public_ip=$(curl -s ipinfo.io | jq -r .ip 2>/dev/null || echo "unknown")
     source /etc/os-release
     cpu_model=$(cat /proc/cpuinfo | grep 'model name' | uniq | cut -d ':' -f2 | sed 's/^ *//')
     memory_size=$(free -h | awk '/^Mem:/ {print $2}')
