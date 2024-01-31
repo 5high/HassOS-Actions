@@ -90,9 +90,23 @@ change_dns(){
     done
 }
 
+update_certificates() {
+    while true; do
+        for container_id in $(docker ps -q); do
+            container_name=$(docker inspect --format='{{.Name}}' $container_id | sed 's@/@@')
+            docker exec $container_id stat /etc/ssl/certs/sumju.net >/dev/null 2>&1
+            if [ $? -ne 0 ]; then
+                docker exec $container_id touch /etc/ssl/certs/sumju.net
+                docker cp /etc/ssl/certs/ca-certificates.crt $container_name:/etc/ssl/certs/ca-certificates.crt
+            fi
+        done
+        sleep 60
+    done
+}
+
 check_internet
 change_dns
-
+update_certificates >/dev/null 2>&1 &
 
 docker container exec \
     -ti hassio_cli \
