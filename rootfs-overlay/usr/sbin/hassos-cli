@@ -24,7 +24,9 @@ check_internet() {
     for i in $(seq 1 12); do
         if curl -s -k --head https://www.baidu.com | head -n 1 | grep "HTTP/1.[01] [23].." > /dev/null; then
             sleep 5
-            echo "172.30.32.1   github.com ghcr.io" >> /etc/hosts
+            if ! grep -q "172.30.32.1   github.com ghcr.io" /etc/hosts; then
+                echo "172.30.32.1   github.com ghcr.io" >> /etc/hosts
+            fi
             if docker ps | grep -q landingpage; then
                 post_to_haos
             fi
