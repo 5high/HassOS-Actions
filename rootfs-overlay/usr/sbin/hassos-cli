@@ -90,18 +90,8 @@ change_dns(){
     done
 }
 
-start() {
-    while true; do
-        if docker ps | grep -q homeassistant; then
-            change_dns
-            break
-        fi
-        sleep 3
-    done
-}
-
 check_internet
-start > /dev/null 2>&1 &
+change_dns
 
 
 docker container exec \
