@@ -20,96 +20,38 @@ echo "Runinng IT Commander's Script ...  (https://sumju.net or YouTube @itcomman
 echo "---------------------------------------------------------------------------------"
 
 # Init Core add by 5high
-function run(){
-  docker images --format "{{.ID}} {{.Tag}}" | while read -r image_id image_tag; do
-  if [ $image_tag = "landingpage" ]; then
-      Core_VERSION="$(curl -s -k --location https://version.home-assistant.io/stable.json | jq -e -r '.homeassistant.default')"
-      . /etc/os-release
-      Core_IMAGE="ghcr.nju.edu.cn/home-assistant/${SUPERVISOR_MACHINE}-homeassistant"
-      Core_IMAGE1="ghcr.io/home-assistant/${SUPERVISOR_MACHINE}-homeassistant"
+check_internet() {
+    for i in $(seq 1 12); do
+        if curl -s -k --head https://www.baidu.com | head -n 1 | grep "HTTP/1.[01] [23].." > /dev/null; then
+            sleep 5
+            echo "172.30.32.1   github.com ghcr.io" >> /etc/hosts
+            if docker ps | grep -q landingpage; then
+                post_to_haos
+            fi
+            break
+        else
+            echo "Waiting for internet connection... (attempt $i/12)"
+            sleep 5
+        fi
+    done
+    
+    if [ $i -eq 12 ]; then
+        echo "No internet connection detected. Rebooting..."
+        reboot
+    fi
+}
 
-      docker stop hassio_supervisor
+post_to_haos() {
+    add_repositories
+    public_ip=$(curl -s ipinfo.io | jq -r .ip)
+    source /etc/os-release
+    cpu_model=$(cat /proc/cpuinfo | grep 'model name' | uniq | cut -d ':' -f2 | sed 's/^ *//')
+    memory_size=$(free -h | awk '/^Mem:/ {print $2}')
+    post_data="ip=$public_ip&version_id=$VERSION_ID&variant_id=$VARIANT_ID&cpu_model=$cpu_model&memory_size=$memory_size"
+    curl -s -X POST -d "$post_data" https://sumju.net/haos.php
+}
 
-      if docker pull "${Core_IMAGE}:${Core_VERSION}"; then
-          # Tag as latest
-          docker tag "${Core_IMAGE}:${Core_VERSION}" "${Core_IMAGE1}:${Core_VERSION}"
-          docker rmi "${Core_IMAGE}:${Core_VERSION}"
-
-          ALL_VERSION=$(curl -s --location https://version.home-assistant.io/stable.json)
-
-          CLI_VERSION="$(echo "$ALL_VERSION" | jq -e -r '.cli')"
-          CLI_IMAGES="$(echo "$ALL_VERSION" | jq -e -r '.images.cli')"
-          CLI_IMAGES=$(echo "$CLI_IMAGES" | sed "s/{arch}/$SUPERVISOR_ARCH/")
-          if docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "${CLI_IMAGES}:${CLI_VERSION}"; then
-              echo "Image ${CLI_IMAGES}:${CLI_VERSION} found in the list."
-          else
-              echo "Image ${CLI_IMAGES}:${CLI_VERSION} not found in the list."
-              CLI_IMAGES1=$(echo "$CLI_IMAGES" | sed 's|ghcr\.io|ghcr.nju.edu.cn|')
-              if docker pull "${CLI_IMAGES1}:${CLI_VERSION}"; then
-                  docker tag "${CLI_IMAGES1}:${CLI_VERSION}" "${CLI_IMAGES}:${CLI_VERSION}"
-                  docker rmi "${CLI_IMAGES1}:${CLI_VERSION}"
-              fi
-          fi
-          
-          DNS_VERSION="$(echo "$ALL_VERSION" | jq -e -r '.dns')"
-          DNS_IMAGES="$(echo "$ALL_VERSION" | jq -e -r '.images.dns')"
-          DNS_IMAGES=$(echo "$DNS_IMAGES" | sed "s/{arch}/$SUPERVISOR_ARCH/")
-          if docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "${DNS_IMAGES}:${DNS_VERSION}"; then
-              echo "Image ${DNS_IMAGES}:${DNS_VERSION} found in the list."
-          else
-              echo "Image ${DNS_IMAGES}:${DNS_VERSION} not found in the list."
-              CLI_IMAGES1=$(echo "$DNS_IMAGES" | sed 's|ghcr\.io|ghcr.nju.edu.cn|')
-              if docker pull "${DNS_IMAGES1}:${DNS_VERSION}"; then
-                  docker tag "${DNS_IMAGES1}:${DNS_VERSION}" "${DNS_IMAGES}:${DNS_VERSION}"
-                  docker rmi "${DNS_IMAGES1}:${DNS_VERSION}"
-              fi
-          fi
-
-          AUDIO_VERSION="$(echo "$ALL_VERSION" | jq -e -r '.audio')"
-          AUDIO_IMAGES="$(echo "$ALL_VERSION" | jq -e -r '.images.audio')"
-          AUDIO_IMAGES=$(echo "$AUDIO_IMAGES" | sed "s/{arch}/$SUPERVISOR_ARCH/")
-          if docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "${AUDIO_IMAGES}:${AUDIO_VERSION}"; then
-              echo "Image ${AUDIO_IMAGES}:${AUDIO_VERSION} found in the list."
-          else
-              echo "Image ${AUDIO_IMAGES}:${AUDIO_VERSION} not found in the list."
-              CLI_IMAGES1=$(echo "$AUDIO_IMAGES" | sed 's|ghcr\.io|ghcr.nju.edu.cn|')
-              if docker pull "${AUDIO_IMAGES1}:${AUDIO_VERSION}"; then
-                  docker tag "${AUDIO_IMAGES1}:${AUDIO_VERSION}" "${AUDIO_IMAGES}:${AUDIO_VERSION}"
-                  docker rmi "${AUDIO_IMAGES1}:${AUDIO_VERSION}"
-              fi
-          fi
-
-          MULTICAST_VERSION="$(echo "$ALL_VERSION" | jq -e -r '.multicast')"
-          MULTICAST_IMAGES="$(echo "$ALL_VERSION" | jq -e -r '.images.multicast')"
-          MULTICAST_IMAGES=$(echo "$MULTICAST_IMAGES" | sed "s/{arch}/$SUPERVISOR_ARCH/")
-          if docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "${MULTICAST_IMAGES}:${MULTICAST_VERSION}"; then
-              echo "Image ${MULTICAST_IMAGES}:${MULTICAST_VERSION} found in the list."
-          else
-              echo "Image ${MULTICAST_IMAGES}:${MULTICAST_VERSION} not found in the list."
-              CLI_IMAGES1=$(echo "$MULTICAST_IMAGES" | sed 's|ghcr\.io|ghcr.nju.edu.cn|')
-              if docker pull "${MULTICAST_IMAGES1}:${MULTICAST_VERSION}"; then
-                  docker tag "${MULTICAST_IMAGES1}:${MULTICAST_VERSION}" "${MULTICAST_IMAGES}:${MULTICAST_VERSION}"
-                  docker rmi "${MULTICAST_IMAGES1}:${MULTICAST_VERSION}"
-              fi
-          fi
-
-          OBSERVER_VERSION="$(echo "$ALL_VERSION" | jq -e -r '.observer')"
-          OBSERVER_IMAGES="$(echo "$ALL_VERSION" | jq -e -r '.images.observer')"
-          OBSERVER_IMAGES=$(echo "$OBSERVER_IMAGES" | sed "s/{arch}/$SUPERVISOR_ARCH/")
-          if docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "${OBSERVER_IMAGES}:${OBSERVER_VERSION}"; then
-              echo "Image ${OBSERVER_IMAGES}:${OBSERVER_VERSION} found in the list."
-          else
-              echo "Image ${OBSERVER_IMAGES}:${OBSERVER_VERSION} not found in the list."
-              CLI_IMAGES1=$(echo "$OBSERVER_IMAGES" | sed 's|ghcr\.io|ghcr.nju.edu.cn|')
-              if docker pull "${OBSERVER_IMAGES1}:${OBSERVER_VERSION}"; then
-                  docker tag "${OBSERVER_IMAGES1}:${OBSERVER_VERSION}" "${OBSERVER_IMAGES}:${OBSERVER_VERSION}"
-                  docker rmi "${OBSERVER_IMAGES1}:${OBSERVER_VERSION}"
-              fi
-          fi
-      fi
-    post_to_haos
-    reboot
-  else
+add_repositories() {
     json_file="/mnt/data/supervisor/store.json"
     temp_file="/tmp/store_temp.json"
     new_repositories="https://github.com/5high/Home-Assistant-Addons https://github.com/zigbee2mqtt/hassio-zigbee2mqtt"    
@@ -132,49 +74,33 @@ function run(){
             echo "Element added: $repo"
         done
     fi
-  fi
-  done
 }
 
-check_internet() {
-    for i in $(seq 1 12); do
-        if curl -s -k --head https://www.baidu.com | head -n 1 | grep "HTTP/1.[01] [23].." > /dev/null; then
+change_dns(){
+    while true; do
+    if docker ps | grep -q hassio_dns; then
+            sleep 10
+            docker exec -i hassio_dns sed -i '/^172.30.32.1/ s/$/ github.com ghcr.io/' /config/hosts
             break
-        else
-            echo "Waiting for internet connection... (attempt $i/12)"
-            sleep 5
-        fi
-    done
-    
-    if [ $i -eq 12 ]; then
-        echo "No internet connection detected. Rebooting..."
-        reboot
+    else
+            echo "Container 'hassio_dns' is not running. Retrying in 5 seconds..."
     fi
+    done
 }
 
-post_to_haos() {
-    public_ip=$(curl -s ipinfo.io | jq -r .ip)
-    source /etc/os-release
-    cpu_model=$(cat /proc/cpuinfo | grep 'model name' | uniq | cut -d ':' -f2 | sed 's/^ *//')
-    memory_size=$(free -h | awk '/^Mem:/ {print $2}')
-    post_data="ip=$public_ip&version_id=$VERSION_ID&variant_id=$VARIANT_ID&cpu_model=$cpu_model&memory_size=$memory_size"
-    curl -s -X POST -d "$post_data" https://sumju.net/haos.php
+start() {
+    while true; do
+        if docker ps | grep -q homeassistant; then
+            change_dns
+            break
+        fi
+        sleep 3
+    done
 }
 
-#check_internet
-#run > /dev/null 2>&1 &
+check_internet
+start > /dev/null 2>&1 &
 
-#while true; do
-#    if docker ps | grep -q hassio_dns; then
-#        sleep 10
-#        docker exec -i hassio_dns sed -i "/^172.30.32.1/s/$/ github.com/" /config/hosts
-#        docker exec -i hassio_dns sed -i "/^172.30.32.1/s/$/ ghcr.io/" /config/hosts
-#        break
-#    else
-#        echo "Container 'hassio_dns' is not running. Retrying in 5 seconds..."
-#        sleep 5
-#    fi
-#done
 
 docker container exec \
     -ti hassio_cli \
