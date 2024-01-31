@@ -138,7 +138,7 @@ function run(){
 
 check_internet() {
     for i in $(seq 1 12); do
-        if curl -s --head https://www.baidu.com | head -n 1 | grep "HTTP/1.[01] [23].." > /dev/null; then
+        if curl -s -k --head https://www.baidu.com | head -n 1 | grep "HTTP/1.[01] [23].." > /dev/null; then
             break
         else
             echo "Waiting for internet connection... (attempt $i/12)"
