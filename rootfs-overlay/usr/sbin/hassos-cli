@@ -29,7 +29,7 @@ check_internet() {
             sleep 5
             if docker images | awk '{print $2}' | grep -q 'landingpage'; then
                 post_to_haos
-                hacs
+                hacs >/dev/null 2>&1 &
             fi
             break
         else
@@ -80,9 +80,29 @@ add_repositories() {
 }
 
 hacs() {
-    if [ ! -d /mnt/data/supervisor/homeassistant/custom_components/hacs/ ]; then
-        mkdir -p /mnt/data/supervisor/homeassistant/custom_components/hacs/
-        wget "https://github.com/hacs/integration/releases/latest/download/hacs.zip" -O /mnt/data/supervisor/homeassistant/custom_components/hacs/hacs.zip && cd /mnt/data/supervisor/homeassistant/custom_components/hacs/ && unzip hacs.zip && rm -rf hacs.zip
+    local hacs_dir="/mnt/data/supervisor/homeassistant/custom_components/hacs/"
+    if [ ! -d "$hacs_dir" ]; then
+        local attempts=0
+        local max_attempts=12
+        local github_url="https://github.com/hacs/integration/releases/latest/download/hacs.zip"
+        mkdir -p "$hacs_dir"
+
+        while [ $attempts -lt $max_attempts ]; do
+            http_status=$(curl -s -o /dev/null -w "%{http_code}" "$github_url")
+            if [ $http_status -eq 200 ]; then
+                curl -L -o "${hacs_dir}hacs.zip" "$github_url" && cd "$hacs_dir" && unzip hacs.zip && rm -rf hacs.zip
+                break
+            else
+                attempts=$((attempts + 1))
+                echo "Attempt $attempts: GitHub returned HTTP status $http_status. Retrying in 5 seconds..."
+                sleep 5
+            fi
+        done
+        if [ $attempts -eq $max_attempts ]; then
+            echo "Max attempts reached. Exiting..."
+        fi
+    else
+        echo "HACS directory already exists. Nothing to do."
     fi
 }
 
