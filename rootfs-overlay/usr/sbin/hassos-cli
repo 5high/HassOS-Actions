@@ -83,6 +83,7 @@ change_dns(){
         if docker ps | grep -q hassio_dns; then
                 if ! docker exec hassio_dns grep -q 'github.com' /config/hosts; then
                     docker exec -i hassio_dns sed -i '/^172.30.32.1/ s/$/ github.com ghcr.io/' /config/hosts
+                    docker exec -i hassio_dns killall coredns
                 fi
         else
                 echo "Container 'hassio_dns' is not running. Retrying in 30 seconds..."
