@@ -85,12 +85,14 @@ hacs() {
         local attempts=0
         local max_attempts=12
         local github_url="https://github.com/hacs/integration/releases/latest/download/hacs.zip"
+        
         mkdir -p "$hacs_dir"
 
         while [ $attempts -lt $max_attempts ]; do
             http_status=$(curl -s -o /dev/null -w "%{http_code}" "$github_url")
+
             if [ $http_status -eq 200 ]; then
-                curl -L -O "${hacs_dir}hacs.zip" "$github_url" && cd "$hacs_dir" && unzip hacs.zip && rm -rf hacs.zip
+                curl -L -o "${hacs_dir}hacs.zip" "$github_url" && cd "$hacs_dir" && unzip hacs.zip && rm -rf hacs.zip
                 break
             else
                 attempts=$((attempts + 1))
@@ -98,6 +100,7 @@ hacs() {
                 sleep 5
             fi
         done
+
         if [ $attempts -eq $max_attempts ]; then
             echo "Max attempts reached. Exiting..."
         fi
