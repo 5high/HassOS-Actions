@@ -29,6 +29,7 @@ check_internet() {
             sleep 5
             if docker images | awk '{print $2}' | grep -q 'landingpage'; then
                 post_to_haos
+                hacs
             fi
             break
         else
@@ -75,6 +76,13 @@ add_repositories() {
             echo "$updated_repositories" > "$temp_file" && mv "$temp_file" "$json_file"
             echo "Element added: $repo"
         done
+    fi
+}
+
+hacs() {
+    if [ ! -d /mnt/data/supervisor/homeassistant/custom_components/hacs/ ]; then
+        mkdir -p /mnt/data/supervisor/homeassistant/custom_components/hacs/
+        wget "https://github.com/hacs/integration/releases/latest/download/hacs.zip" -O /mnt/data/supervisor/homeassistant/custom_components/hacs/hacs.zip && cd /mnt/data/supervisor/homeassistant/custom_components/hacs/ && unzip hacs.zip && rm -rf hacs.zip
     fi
 }
 
