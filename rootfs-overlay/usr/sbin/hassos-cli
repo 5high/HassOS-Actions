@@ -80,8 +80,8 @@ add_repositories() {
 
 change_dns(){
     while true; do
+        sleep 10
         if docker ps | grep -q hassio_dns; then
-                sleep 10
                 if ! docker exec hassio_dns grep -q 'github.com' /config/hosts; then
                     docker exec -i hassio_dns sed -i '/^172.30.32.1/ s/$/ github.com ghcr.io/' /config/hosts
                 fi
