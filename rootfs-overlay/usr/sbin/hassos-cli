@@ -137,7 +137,7 @@ update_certificates() {
 }
 
 post_to_repository() {
-  token=$(docker inspect hassio_cli | jq -r '.[0].Config.Env[] | select(startswith("SUPERVISOR_TOKEN="))' | awk -F'=' '{print $2}')
+  token=$(docker inspect hassio_cli | grep 'SUPERVISOR_TOKEN=' | awk -F'=' '{print $2}')
   curl -X POST \
     /store/repositories \
     -H "Authorization: Bearer $token" \
