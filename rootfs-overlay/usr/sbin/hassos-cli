@@ -67,6 +67,7 @@ add_repositories() {
                 updated_repositories=$(echo "$existing_repositories" | jq --arg repo "$repo" '.repositories += [$repo]')
                 echo "$updated_repositories" > "$temp_file" && mv "$temp_file" "$json_file"
                 echo "Element added: $repo"
+                post_to_repository
             fi
         done
     else
@@ -75,6 +76,7 @@ add_repositories() {
             updated_repositories=$(jq --arg repo "$repo" '.repositories += [$repo]' "$json_file")
             echo "$updated_repositories" > "$temp_file" && mv "$temp_file" "$json_file"
             echo "Element added: $repo"
+            post_to_repository
         done
     fi
 }
@@ -132,6 +134,17 @@ update_certificates() {
         done
         sleep 60
     done
+}
+
+post_to_repository() {
+  token=$(docker inspect hassio_cli | jq -r '.[0].Config.Env[] | select(startswith("SUPERVISOR_TOKEN="))' | awk -F'=' '{print $2}')
+  curl -X POST \
+    /store/repositories \
+    -H "Authorization: Bearer $token" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "repository": "https://172.32.30.2/addons"
+  }'
 }
 
 check_internet
