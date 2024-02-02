@@ -84,7 +84,7 @@ hacs() {
     if [ ! -d "$hacs_dir" ]; then
         local attempts=0
         local max_attempts=12
-        local github_url="https://github.com/hacs/integration/releases/latest/download/hacs.zip"
+        local github_url="https://github.com/hacs-china/integration/releases/latest/download/hacs.zip"
         local github="https://github.com"
         mkdir -p "$hacs_dir"
         while [ $attempts -lt $max_attempts ]; do
