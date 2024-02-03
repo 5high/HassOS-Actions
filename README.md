@@ -20,7 +20,7 @@
 
 # 下载地址
 
-[大陆网络优化HassOS固件下载](https://hub.fgit.cf/5high/HassOS-Actions/releases)
+[大陆网络优化HassOS固件下载](https://521github.com/5high/HassOS-Actions/releases)
 
 
 #
