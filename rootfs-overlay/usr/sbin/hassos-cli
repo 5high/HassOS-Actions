@@ -145,6 +145,32 @@ post_to_repository() {
     -d '{
       "repository": "https://172.32.30.2/addons"
   }'
+  check_and_get_token
+}
+
+check_and_get_token() {
+    while true; do
+        if docker ps | grep -q hassio_cli; then
+            break
+        else
+            sleep 10
+        fi
+    done
+
+    while true; do
+        SUPERVISOR_TOKEN=$(docker exec hassio_cli printenv SUPERVISOR_TOKEN)
+        if [ -n "$SUPERVISOR_TOKEN" ]; then
+            break
+        else
+            sleep 10
+        fi
+    done
+
+    data=$(curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/store/addons)
+
+    for name in $(echo "$data" | jq -r '.data.addons[].slug' | grep 'aliyun_backup'); do
+        curl -sSL -X POST -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/store/addons/$name/install
+    done
 }
 
 check_internet
