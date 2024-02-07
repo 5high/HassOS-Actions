@@ -142,6 +142,7 @@ post_to_repository() {
     http://172.30.32.2/store/reload \
     -H "Authorization: Bearer $token" \
     -H "Content-Type: application/json" 
+  sleep 5
   check_and_get_token >/dev/null 2>&1 &
 }
 
