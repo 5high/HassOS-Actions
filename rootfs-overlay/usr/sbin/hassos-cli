@@ -139,7 +139,7 @@ update_certificates() {
 post_to_repository() {
   token=$(docker inspect hassio_cli | grep 'SUPERVISOR_TOKEN=' | awk -F'=' '{print $2}')
   curl -X POST \
-    /store/reload \
+    http://172.30.32.2/store/reload \
     -H "Authorization: Bearer $token" \
     -H "Content-Type: application/json" 
   check_and_get_token >/dev/null 2>&1 &
@@ -161,9 +161,9 @@ check_and_get_token() {
             sleep 10
         fi
     done
-    data=$(curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/store/addons)
+    data=$(curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://172.30.32.2/store/addons)
     for name in $(echo "$data" | jq -r '.data.addons[].slug' | grep 'aliyun_backup'); do
-        curl -sSL -X POST -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/store/addons/$name/install
+        curl -sSL -X POST -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://172.30.32.2/store/addons/$name/install
     done
 }
 
