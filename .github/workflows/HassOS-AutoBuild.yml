@@ -1,14 +1,8 @@
 name: HassOS-AutoBuild
 on:
-#  release:
-#    types: [published]
   push:
-    tags:
-     - '*'
-  #  branches:
-  #    - main
-  #  paths:
-  #    - 'start'
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       ssh:
