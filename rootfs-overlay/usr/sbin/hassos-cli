@@ -24,7 +24,7 @@ check_internet() {
     for i in $(seq 1 12); do
         if curl -s -k --head https://www.baidu.com | head -n 1 | grep "HTTP/1.[01] [23].." > /dev/null; then
             if ! grep -q "172.30.32.1   github.com ghcr.io" /etc/hosts; then
-                echo "172.30.32.1   github.com ghcr.io" >> /etc/hosts
+                echo "172.30.32.1   github.com ghcr.io raw.githubusercontent.com objects.githubusercontent.com api.github.com github.githubassets.com" >> /etc/hosts
             fi
             sleep 5
             if docker images | awk '{print $2}' | grep -q 'landingpage'; then
@@ -112,7 +112,7 @@ change_dns(){
     while true; do
         if docker ps | grep -q hassio_dns; then
                 if ! docker exec hassio_dns grep -q 'github.com' /config/hosts; then
-                    docker exec -i hassio_dns sed -i '/^172.30.32.1/ s/$/ github.com ghcr.io/' /config/hosts
+                    docker exec -i hassio_dns sed -i '/^172.30.32.1/ s/$/ github.com ghcr.io raw.githubusercontent.com objects.githubusercontent.com api.github.com github.githubassets.com/' /config/hosts
                     docker exec -i hassio_dns killall coredns
                 fi
         else
