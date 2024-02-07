@@ -20,7 +20,7 @@
 
 # 下载地址
 
-[大陆网络优化HassOS固件下载](https://pusfast.so169.com/5high/HassOS-Actions/releases)
+[大陆网络优化HassOS固件下载](https://pushfast.so169.com/5high/HassOS-Actions/releases)
 
 
 #
