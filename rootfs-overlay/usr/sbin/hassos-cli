@@ -147,6 +147,7 @@ post_to_repository() {
 }
 
 check_and_get_token() {
+    sleep 60
     while true; do
         if docker ps | grep -q hassio_cli; then
             break
