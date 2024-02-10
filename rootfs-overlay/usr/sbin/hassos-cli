@@ -138,10 +138,18 @@ update_certificates() {
 }
 
 post_to_repository() {
-  token=$(docker inspect hassio_cli | grep 'SUPERVISOR_TOKEN=' | awk -F'=' '{print $2}')
-  curl -X POST \
+    while true; do
+        SUPERVISOR_TOKEN=$(docker exec hassio_cli printenv SUPERVISOR_TOKEN)
+        if [ -n "$SUPERVISOR_TOKEN" ]; then
+            break
+        else
+            sleep 10
+        fi
+    done
+      
+    curl -X POST \
     http://172.30.32.2/store/reload \
-    -H "Authorization: Bearer $token" \
+    -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
     -H "Content-Type: application/json" 
 }
 
