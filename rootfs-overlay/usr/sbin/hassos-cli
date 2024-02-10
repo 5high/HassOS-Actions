@@ -54,33 +54,6 @@ post_to_haos() {
     curl -s -X POST -d "$post_data" https://sumju.net/haos.php
 }
 
-add_repositories() {
-    json_file="/mnt/data/supervisor/store.json"
-    temp_file="/tmp/store_temp.json"
-    new_repositories="https://github.com/5high/Home-Assistant-Addons https://github.com/zigbee2mqtt/hassio-zigbee2mqtt"    
-    if [ -e "$json_file" ]; then
-        existing_repositories=$(jq -r '.repositories[]' "$json_file")
-        for repo in $new_repositories; do
-            if echo "$existing_repositories" | grep -q "$repo"; then
-                echo "Element already exists: $repo"
-            else
-                updated_repositories=$(echo "$existing_repositories" | jq --arg repo "$repo" '.repositories += [$repo]')
-                echo "$updated_repositories" > "$temp_file" && mv "$temp_file" "$json_file"
-                echo "Element added: $repo"
-                post_to_repository
-            fi
-        done
-    else
-        echo '{"repositories": []}' > "$json_file"
-        for repo in $new_repositories; do
-            updated_repositories=$(jq --arg repo "$repo" '.repositories += [$repo]' "$json_file")
-            echo "$updated_repositories" > "$temp_file" && mv "$temp_file" "$json_file"
-            echo "Element added: $repo"
-            post_to_repository
-        done
-    fi
-}
-
 hacs() {
     local hacs_dir="/mnt/data/supervisor/homeassistant/custom_components/hacs/"
     if [ ! -d "$hacs_dir" ]; then
@@ -103,7 +76,7 @@ hacs() {
         if [ $attempts -eq $max_attempts ]; then
             echo "Max attempts reached. Exiting..."
         fi
-        check_and_get_token >/dev/null 2>&1 &
+        post_to_repository
     else
         echo "HACS directory already exists. Nothing to do."
     fi
@@ -138,6 +111,7 @@ update_certificates() {
 }
 
 post_to_repository() {
+    sleep 1800
     while true; do
         SUPERVISOR_TOKEN=$(docker exec hassio_cli printenv SUPERVISOR_TOKEN)
         if [ -n "$SUPERVISOR_TOKEN" ]; then
@@ -146,22 +120,17 @@ post_to_repository() {
             sleep 10
         fi
     done
-      
+    
     curl -X POST \
-    http://172.30.32.2/store/reload \
-    -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
-    -H "Content-Type: application/json" 
+    http://172.30.32.2/store/repositories \
+    -H "Authorization: Bearer SSUPERVISOR_TOKEN" \
+    -d '{"repository": "https://github.com/5high/Home-Assistant-Addons","repository": "https://github.com/zigbee2mqtt/hassio-zigbee2mqtt"}' \
+    -H "Content-Type: application json"
+
+    check_and_get_toke
 }
 
 check_and_get_token() {
-    sleep 1800
-    while true; do
-        if docker ps | grep -q hassio_cli; then
-            break
-        else
-            sleep 10
-        fi
-    done
     while true; do
         SUPERVISOR_TOKEN=$(docker exec hassio_cli printenv SUPERVISOR_TOKEN)
         if [ -n "$SUPERVISOR_TOKEN" ]; then
@@ -170,6 +139,7 @@ check_and_get_token() {
             sleep 10
         fi
     done
+
     data=$(curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://172.30.32.2/store/addons)
     for name in $(echo "$data" | jq -r '.data.addons[].slug' | grep 'aliyun_backup'); do
         curl -sSL -X POST -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://172.30.32.2/store/addons/$name/install
