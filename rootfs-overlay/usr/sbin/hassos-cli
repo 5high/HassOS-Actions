@@ -123,7 +123,7 @@ post_to_repository() {
     
     curl -X POST \
     http://172.30.32.2/store/repositories \
-    -H "Authorization: Bearer SSUPERVISOR_TOKEN" \
+    -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
     -d '{"repository": "https://github.com/5high/Home-Assistant-Addons","repository": "https://github.com/zigbee2mqtt/hassio-zigbee2mqtt"}' \
     -H "Content-Type: application json"
 
