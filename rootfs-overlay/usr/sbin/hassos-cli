@@ -127,22 +127,20 @@ post_to_repository() {
     -d '{"repository": "https://github.com/5high/Home-Assistant-Addons","repository": "https://github.com/zigbee2mqtt/hassio-zigbee2mqtt"}' \
     -H "Content-Type: application json"
 
-    check_and_get_toke
-}
-
-check_and_get_token() {
-    while true; do
-        SUPERVISOR_TOKEN=$(docker exec hassio_cli printenv SUPERVISOR_TOKEN)
-        if [ -n "$SUPERVISOR_TOKEN" ]; then
-            break
-        else
-            sleep 10
-        fi
-    done
-
     data=$(curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://172.30.32.2/store/addons)
     for name in $(echo "$data" | jq -r '.data.addons[].slug' | grep 'aliyun_backup'); do
         curl -sSL -X POST -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://172.30.32.2/store/addons/$name/install
+        
+        curl -X POST \
+            http://172.30.32.2/$name/options \
+            -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+            -d '{"boot": "auto","ingress_panel": true,"auto_update": true,"watchdog": true}' \
+            -H "Content-Type: application json"
+
+        curl -X POST \
+            http://172.30.32.2/$name/start \
+            -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+            -H "Content-Type: application json"
     done
 }
 
