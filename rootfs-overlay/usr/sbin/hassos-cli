@@ -103,6 +103,7 @@ hacs() {
         if [ $attempts -eq $max_attempts ]; then
             echo "Max attempts reached. Exiting..."
         fi
+        check_and_get_token >/dev/null 2>&1 &
     else
         echo "HACS directory already exists. Nothing to do."
     fi
@@ -142,7 +143,6 @@ post_to_repository() {
     http://172.30.32.2/store/reload \
     -H "Authorization: Bearer $token" \
     -H "Content-Type: application/json" 
-  check_and_get_token >/dev/null 2>&1 &
 }
 
 check_and_get_token() {
