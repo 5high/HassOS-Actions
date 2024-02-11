@@ -124,7 +124,13 @@ post_to_repository() {
     curl -X POST \
     http://172.30.32.2/store/repositories \
     -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
-    -d '{"repository": "https://github.com/5high/Home-Assistant-Addons","repository": "https://github.com/zigbee2mqtt/hassio-zigbee2mqtt"}' \
+    -d '{"repository": "https://github.com/5high/Home-Assistant-Addons"}' \
+    -H "Content-Type: application json"
+
+    curl -X POST \
+    http://172.30.32.2/store/repositories \
+    -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+    -d '{"repository": "https://github.com/zigbee2mqtt/hassio-zigbee2mqtt"}' \
     -H "Content-Type: application json"
 
     data=$(curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://172.30.32.2/store/addons)
@@ -132,13 +138,13 @@ post_to_repository() {
         curl -sSL -X POST -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://172.30.32.2/store/addons/$name/install
         
         curl -X POST \
-            http://172.30.32.2/$name/options \
+            http://172.30.32.2/addons/$name/options \
             -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
             -d '{"boot": "auto","ingress_panel": true,"auto_update": true,"watchdog": true}' \
             -H "Content-Type: application json"
 
         curl -X POST \
-            http://172.30.32.2/$name/start \
+            http://172.30.32.2/addons/$name/start \
             -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
             -H "Content-Type: application json"
     done
