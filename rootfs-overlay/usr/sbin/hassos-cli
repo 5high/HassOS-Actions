@@ -92,7 +92,7 @@ change_dns(){
         else
                 echo "Container 'hassio_dns' is not running. Retrying in 30 seconds..."
         fi
-        sleep 60
+        sleep 5
     done
 }
 
@@ -106,7 +106,7 @@ update_certificates() {
                 docker cp /etc/ssl/certs/ca-certificates.crt $container_name:/etc/ssl/certs/ca-certificates.crt
             fi
         done
-        sleep 60
+        sleep 5
     done
 }
 
