@@ -110,7 +110,6 @@ update_certificates() {
 }
 
 post_to_repository() {
-    sleep 1800
     while true; do
         SUPERVISOR_TOKEN=$(docker exec hassio_cli printenv SUPERVISOR_TOKEN)
         if [ -n "$SUPERVISOR_TOKEN" ]; then
@@ -119,7 +118,18 @@ post_to_repository() {
             sleep 10
         fi
     done
-    
+
+    while true; do
+      tags=$(docker ps --format "{{.Image}}" | grep 'landingpage')
+      if [ -z "$tags" ]; then
+        echo "没有找到tag为landingpage的镜像，退出循环。"
+        break
+      else
+        echo "找到tag为landingpage的镜像，等待5秒。"
+        sleep 5
+      fi
+    done
+
     curl -X POST \
     http://172.30.32.2/store/repositories \
     -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
