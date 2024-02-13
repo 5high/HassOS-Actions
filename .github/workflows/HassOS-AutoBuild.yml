@@ -101,7 +101,7 @@ jobs:
         echo "BR2_TARGET_LOCALTIME=\"Asia/Shanghai\"" >> buildroot-external/configs/${{matrix.target}}_defconfig
         sed -i '/\[Service\]/a RestartSec=10' buildroot/package/nginx/nginx.service
         sed -i '/\[Service\]/a Restart=always' buildroot/package/nginx/nginx.service
-        #sed -i '/After=syslog.target network.target/ s/$/ hassos-supervisor.service/' buildroot/package/nginx/nginx.service
+        sed -i '/After=syslog.target network.target/ s/$/ hassos-supervisor.service/' buildroot/package/nginx/nginx.service
         sed -i '/cd \$(TARGET_DIR) ;\\/i \ \ \ \ wget -O \$(TARGET_DIR)\/usr\/share\/ca-certificates\/itcommander.crt https:\/\/github.com\/5high\/HassOS-Actions\/raw\/main\/rootfs-overlay\/etc\/ssl\/certs\/rootCA.cer' buildroot/package/ca-certificates/ca-certificates.mk   
         
     - name: SSH connection to Actions
