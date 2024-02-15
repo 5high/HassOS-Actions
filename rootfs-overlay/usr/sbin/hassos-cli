@@ -82,9 +82,9 @@ hacs() {
 }
 
 slowlooping(){
-    sleep 15
+    sleep 30
     update_certificates
-    sleep 15
+    sleep 30
     change_dns
 }
 
@@ -135,6 +135,8 @@ post_to_repository() {
         fi
     done
 
+    python_ssl
+
     curl -X POST \
     http://172.30.32.2/store/repositories \
     -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
@@ -161,6 +163,19 @@ post_to_repository() {
             http://172.30.32.2/addons/$name/start \
             -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
             -H "Content-Type: application json"
+    done
+}
+
+python_ssl(){
+    container_names=$(docker ps --format "{{.Names}}")
+    for container_name in $container_names; do
+        python_installed=$(docker exec $container_name which python)
+        if [ -n "$python_installed" ]; then
+            container_site_packages=$(docker exec $container_name python -c "import site; print(':'.join(site.getsitepackages()))")
+            docker cp /etc/ssl/certs/ca-certificates.crt $container_name:$container_site_packages/certifi/cacert.pem
+            docker exec $container_name sed -i 's#https://github.com#https://pushfast.so169.com#g' $container_site_packages/aiogithubapi/const.py
+            docker exec $container_name sed -i 's#https://api.github.com#https://pushapi.so169.com#g' $container_site_packages/aiogithubapi/const.py
+        fi
     done
 }
 
