@@ -54,6 +54,7 @@ post_to_haos() {
 }
 
 hacs() {
+    post_to_repository
     local hacs_dir="/mnt/data/supervisor/homeassistant/custom_components/hacs/"
     if [ ! -d "$hacs_dir" ]; then
         local attempts=0
@@ -75,10 +76,16 @@ hacs() {
         if [ $attempts -eq $max_attempts ]; then
             echo "Max attempts reached. Exiting..."
         fi
-        post_to_repository
     else
         echo "HACS directory already exists. Nothing to do."
     fi
+}
+
+slowlooping(){
+    sleep 15
+    update_certificates
+    sleep 15
+    change_dns
 }
 
 change_dns(){
@@ -91,7 +98,6 @@ change_dns(){
         else
                 echo "Container 'hassio_dns' is not running. Retrying in 30 seconds..."
         fi
-        sleep 30
     done
 }
 
@@ -105,11 +111,21 @@ update_certificates() {
                 docker cp /etc/ssl/certs/ca-certificates.crt $container_name:/etc/ssl/certs/ca-certificates.crt
             fi
         done
-        sleep 30
     done
 }
 
 post_to_repository() {
+    while true; do
+      tags=$(docker ps --format "{{.Image}}" | grep 'landingpage')
+      if [ -z "$tags" ]; then
+        break
+      else
+        update_certificates
+        change_dns
+        sleep 1
+      fi
+    done
+
     while true; do
         SUPERVISOR_TOKEN=$(docker exec hassio_cli printenv SUPERVISOR_TOKEN)
         if [ -n "$SUPERVISOR_TOKEN" ]; then
@@ -117,17 +133,6 @@ post_to_repository() {
         else
             sleep 10
         fi
-    done
-
-    while true; do
-      tags=$(docker ps --format "{{.Image}}" | grep 'landingpage')
-      if [ -z "$tags" ]; then
-        echo "没有找到tag为landingpage的镜像，退出循环。"
-        break
-      else
-        echo "找到tag为landingpage的镜像，等待5秒。"
-        sleep 5
-      fi
     done
 
     curl -X POST \
@@ -160,8 +165,7 @@ post_to_repository() {
 }
 
 check_internet
-change_dns >/dev/null 2>&1 &
-update_certificates >/dev/null 2>&1 &
+slowlooping >/dev/null 2>&1 &
 
 docker container exec \
     -ti hassio_cli \
