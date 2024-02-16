@@ -114,6 +114,9 @@ update_certificates() {
 }
 
 post_to_repository() {
+    update_certificates
+    change_dns
+    
     while true; do
       tags=$(docker ps --format "{{.Image}}" | grep 'landingpage')
       if [ -z "$tags" ]; then
@@ -124,7 +127,7 @@ post_to_repository() {
     done
 
     python_ssl
-    
+
     while true; do
         SUPERVISOR_TOKEN=$(docker exec hassio_cli printenv SUPERVISOR_TOKEN)
         if [ -n "$SUPERVISOR_TOKEN" ]; then
