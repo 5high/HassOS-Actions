@@ -114,9 +114,7 @@ update_certificates() {
 }
 
 post_to_repository() {
-    update_certificates
-    change_dns
-    
+    slowlooping >/dev/null 2>&1 &   
     while true; do
       tags=$(docker ps --format "{{.Image}}" | grep 'landingpage')
       if [ -z "$tags" ]; then
@@ -180,7 +178,6 @@ python_ssl(){
 }
 
 check_internet
-slowlooping >/dev/null 2>&1 &
 
 docker container exec \
     -ti hassio_cli \
