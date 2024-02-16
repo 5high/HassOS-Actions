@@ -83,6 +83,7 @@ hacs() {
 
 slowlooping(){
     update_certificates
+    python_ssl
     change_dns
     sleep 30
 }
@@ -114,8 +115,7 @@ update_certificates() {
     done
 }
 
-post_to_repository() {
-    slowlooping >/dev/null 2>&1 &   
+post_to_repository() { 
     while true; do
       tags=$(docker ps --format "{{.Image}}" | grep 'landingpage')
       if [ -z "$tags" ]; then
@@ -168,17 +168,22 @@ post_to_repository() {
 python_ssl(){
     container_names=$(docker ps --format "{{.Names}}")
     for container_name in $container_names; do
+        if docker exec $container_name test -f "/tmp/python_ssl_modified"; then
+            continue
+        fi
         python_installed=$(docker exec $container_name which python)
         if [ -n "$python_installed" ]; then
             container_site_packages=$(docker exec $container_name python -c "import site; print(':'.join(site.getsitepackages()))")
             docker cp /etc/ssl/certs/ca-certificates.crt $container_name:$container_site_packages/certifi/cacert.pem
             docker exec $container_name sed -i 's#https://github.com#https://pushfast.so169.com#g' $container_site_packages/aiogithubapi/const.py
             docker exec $container_name sed -i 's#https://api.github.com#https://pushapi.so169.com#g' $container_site_packages/aiogithubapi/const.py
+            docker exec $container_name touch /tmp/python_ssl_modified
         fi
     done
 }
 
 check_internet
+slowlooping >/dev/null 2>&1 &  
 
 docker container exec \
     -ti hassio_cli \
