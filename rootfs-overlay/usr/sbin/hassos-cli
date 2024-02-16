@@ -82,10 +82,9 @@ hacs() {
 }
 
 slowlooping(){
-    sleep 30
     update_certificates
-    sleep 30
     change_dns
+    sleep 30
 }
 
 change_dns(){
@@ -120,12 +119,12 @@ post_to_repository() {
       if [ -z "$tags" ]; then
         break
       else
-        update_certificates
-        change_dns
-        sleep 1
+        sleep 10
       fi
     done
 
+    python_ssl
+    
     while true; do
         SUPERVISOR_TOKEN=$(docker exec hassio_cli printenv SUPERVISOR_TOKEN)
         if [ -n "$SUPERVISOR_TOKEN" ]; then
@@ -134,8 +133,6 @@ post_to_repository() {
             sleep 10
         fi
     done
-
-    python_ssl
 
     curl -X POST \
     http://172.30.32.2/store/repositories \
