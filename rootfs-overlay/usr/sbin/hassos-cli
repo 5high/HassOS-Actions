@@ -179,7 +179,7 @@ python_ssl(){
                 docker exec $container_name touch /tmp/python_ssl_modified
             fi
         done
-    sleep 360
+    sleep 120
     done
 }
 
