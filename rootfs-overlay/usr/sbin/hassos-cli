@@ -94,7 +94,7 @@ change_dns(){
     while true; do
         if docker ps | grep -q hassio_dns; then
                 if ! docker exec hassio_dns grep -q 'github.com' /config/hosts; then
-                    docker exec -i hassio_dns sed -i '/^172.30.32.1/ s/$/ github.com ghcr.io raw.githubusercontent.com objects.githubusercontent.com api.github.com github.githubassets.com services.home-assistant.io version.home-assistant.io/' /config/hosts
+                    docker exec -i hassio_dns sed -i  '/^172.30.32.1/ s/$/ github.com ghcr.io raw.githubusercontent.com objects.githubusercontent.com api.github.com github.githubassets.com services.home-assistant.io version.home-assistant.io/' /config/hosts
                     docker exec -i hassio_dns killall coredns
                 fi
         else
