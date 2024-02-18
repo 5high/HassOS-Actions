@@ -134,6 +134,8 @@ post_to_repository() {
         fi
     done
 
+    sleep 10
+
     curl -X POST \
     http://172.30.32.2/store/repositories \
     -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
