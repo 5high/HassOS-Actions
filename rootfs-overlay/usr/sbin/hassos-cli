@@ -97,7 +97,7 @@ change_dns(){
                 docker exec -i hassio_dns killall coredns
             fi
         fi
-    sleep 30
+    sleep 10
     done
 }
 
@@ -111,7 +111,7 @@ update_certificates() {
                 docker cp /etc/ssl/certs/ca-certificates.crt $container_name:/etc/ssl/certs/ca-certificates.crt
             fi
         done
-    sleep 30
+    sleep 10
     done
 }
 
