@@ -57,7 +57,6 @@ jobs:
         path: dummy-path
         key: ${{ env.HASSOS_VERSION_OLD }}
         restore-keys: ${{ env.HASSOS_VERSION_OLD }}
-        retention-period: 180
     
     - name: Initialization environment
       run: |
