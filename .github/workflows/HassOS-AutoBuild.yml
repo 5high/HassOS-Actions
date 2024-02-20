@@ -54,7 +54,7 @@ jobs:
     - name: Update Environment Variable
       uses: tj-actions/set-env@v2
       with:
-        HA_Ver: '${{ HA_Ver }}'
+        HA_Ver: ${{ HA_Ver }}
     
     - name: Initialization environment
       run: |
