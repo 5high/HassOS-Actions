@@ -56,6 +56,7 @@ jobs:
       with:
         path: dummy-path
         key: ${{ env.HASSOS_VERSION_OLD }}
+        restore-keys: ${{ env.HASSOS_VERSION_OLD }}
         retention-period: 180
     
     - name: Initialization environment
@@ -185,9 +186,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
-#    - name: Notify on Telegram
-#      uses: appleboy/telegram-action@master
-#      with:
-#        to: ${{ secrets.TELEGRAM_CHAT_ID }}
-#        token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-#       message: "New release! Download it [here](${{ steps.upload-release.outputs.browser_download_url }})."
+   - name: Notify on Telegram
+     uses: appleboy/telegram-action@master
+     with:
+       to: ${{ secrets.TELEGRAM_CHAT_ID }}
+       token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      message: "New release! Download it [here](${{ steps.upload-release.outputs.browser_download_url }})."
