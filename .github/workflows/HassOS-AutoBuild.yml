@@ -58,7 +58,7 @@ jobs:
         script: |
           const variableName = 'HA_VER';
           const variableValue = process.env.HASSOS_VERSION;
-          await github.actions.createOrUpdateRepoSecret({
+          await github.repos.createOrUpdateSecretForRepo({
             owner: process.env.GITHUB_REPOSITORY_OWNER,
             repo: process.env.GITHUB_REPOSITORY,
             secret_name: variableName,
