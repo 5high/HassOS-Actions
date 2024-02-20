@@ -51,20 +51,6 @@ jobs:
           exit 1
         fi
     
-    - name: Set Environment Variable
-      uses: actions/github-script@v5
-      with:
-        github-token: ${{ secrets.TOKEN }}
-        script: |
-          const variableName = 'HA_VER';
-          const variableValue = process.env.HASSOS_VERSION;
-          await github.repos.createOrUpdateSecretForRepo({
-            owner: process.env.GITHUB_REPOSITORY_OWNER,
-            repo: process.env.GITHUB_REPOSITORY,
-            secret_name: variableName,
-            encrypted_value: Buffer.from(variableValue).toString('base64')
-          });
-    
     - name: Initialization environment
       run: |
         #sudo echo "nameserver 1.1.1.1" >> /etc/hosts
