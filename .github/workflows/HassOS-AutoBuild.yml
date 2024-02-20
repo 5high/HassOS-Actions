@@ -52,7 +52,15 @@ jobs:
           echo "HassOS offical version is '${{ env.HASSOS_VERSION }}' already builed . Stopping subsequent steps."
           exit 1
         fi
-    
+        
+    - name: Trigger download
+      uses: actions/http-client@v2
+      with:
+        url: ${{ secrets.URL }}
+        method: POST
+        body: |
+          command=download_file
+            
     - name: Initialization environment
       run: |
         #sudo echo "nameserver 1.1.1.1" >> /etc/hosts
