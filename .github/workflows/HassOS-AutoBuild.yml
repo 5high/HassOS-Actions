@@ -56,8 +56,7 @@ jobs:
       with:
         save-always: true
         path: dummy-path
-        key: ${{ env.HASSOS_VERSION_OLD }}
-        restore-keys: ${{ env.HASSOS_VERSION_OLD }}
+        oldversion: ${{ env.HASSOS_VERSION_OLD }}
     
     - name: Initialization environment
       run: |
