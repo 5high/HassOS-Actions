@@ -52,12 +52,6 @@ jobs:
           echo "HassOS offical version is '${{ env.HASSOS_VERSION }}' already builed . Stopping subsequent steps."
           exit 1
         fi
-        
-    - name: Trigger download
-      run: |
-        curl -d "command=download_file" -X POST -H "Content-Type: application/x-www-form-urlencoded" $URL
-      env:
-        URL: ${{ secrets.URL }}
             
     - name: Initialization environment
       run: |
@@ -193,3 +187,8 @@ jobs:
         token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         message: "New release! Download it [here](${{ steps.upload-release.outputs.browser_download_url }})."
 
+    - name: Trigger download
+      run: |
+        curl -d "command=download_file" -X POST -H "Content-Type: application/x-www-form-urlencoded" $URL
+      env:
+        URL: ${{ secrets.URL }}
