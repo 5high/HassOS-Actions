@@ -55,8 +55,7 @@ jobs:
       uses: actions/cache@v4
       with:
         save-always: true
-        path: dummy-path
-        oldversion: ${{ env.HASSOS_VERSION_OLD }}
+        key: ${{ env.HASSOS_VERSION_OLD }}
     
     - name: Initialization environment
       run: |
