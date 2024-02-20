@@ -50,7 +50,7 @@ jobs:
           echo "HassOS version has changed from '${{ env.HA_VER }}' to '${{ env.HASSOS_VERSION }}' . Proceeding with next steps."
         else
           echo "HassOS offical version is '${{ env.HASSOS_VERSION }}' already builed . Stopping subsequent steps."
-          exit 0
+          exit 1
         fi
             
     - name: Initialization environment
