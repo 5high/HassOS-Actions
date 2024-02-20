@@ -52,8 +52,9 @@ jobs:
         fi
     
     - name: Cache HassOS Old Version
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
+        save-always: true
         path: dummy-path
         key: ${{ env.HASSOS_VERSION_OLD }}
         restore-keys: ${{ env.HASSOS_VERSION_OLD }}
