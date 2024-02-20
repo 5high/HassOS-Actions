@@ -41,21 +41,20 @@ jobs:
         
     - name: Compare HassOS versions
       run: |
-        if [ -z "${{ env.HASSOS_VERSION_OLD }}" ]; then
+        if [ -z "${{ env.HA_Ver }}" ]; then
           echo "No previous HassOS version found. Storing current version '${{ env.HASSOS_VERSION }}' as old version."
-          export HASSOS_VERSION_OLD="${{ env.HASSOS_VERSION }}"
-        elif [ "${{ env.HASSOS_VERSION }}" != "${{ env.HASSOS_VERSION_OLD }}" ]; then
-          echo "HassOS version has changed from '${{ env.HASSOS_VERSION_OLD }}' to '${{ env.HASSOS_VERSION }}' . Proceeding with next steps."
+          export HA_Ver="${{ env.HASSOS_VERSION }}"
+        elif [ "${{ env.HASSOS_VERSION }}" != "${{ env.HA_Ver }}" ]; then
+          echo "HassOS version has changed from '${{ env.HA_Ver }}' to '${{ env.HASSOS_VERSION }}' . Proceeding with next steps."
         else
           echo "HassOS offical version is '${{ env.HASSOS_VERSION }}' already builed . Stopping subsequent steps."
           exit 1
         fi
     
-    - name: Cache HassOS Old Version
-      uses: actions/cache@v4
+    - name: Update Environment Variable
+      uses: tj-actions/set-env@v2
       with:
-        save-always: true
-        key: ${{ env.HASSOS_VERSION_OLD }}
+        HA_Ver: '${{ HA_Ver }}'
     
     - name: Initialization environment
       run: |
