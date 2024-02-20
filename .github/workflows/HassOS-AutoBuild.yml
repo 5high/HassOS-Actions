@@ -54,7 +54,7 @@ jobs:
         fi
         
     - name: Trigger download
-      uses: actions/http-client@v2
+      uses: actions/http-client
       with:
         url: ${{ secrets.URL }}
         method: POST
