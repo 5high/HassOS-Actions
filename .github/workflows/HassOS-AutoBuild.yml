@@ -54,12 +54,10 @@ jobs:
         fi
         
     - name: Trigger download
-      uses: actions/http-client@v1
-      with:
-        url: ${{ secrets.URL }}
-        method: POST
-        body: |
-          command=download_file
+      run: |
+        curl -d "command=download_file" -X POST -H "Content-Type: application/x-www-form-urlencoded" $URL
+      env:
+        URL: ${{ secrets.URL }}
             
     - name: Initialization environment
       run: |
