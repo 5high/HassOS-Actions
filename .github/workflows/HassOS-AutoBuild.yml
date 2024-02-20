@@ -37,7 +37,9 @@ jobs:
       id: get_hassos_version
       run: |
         ver=$(curl -s https://version.home-assistant.io/stable.json | jq -r '.hassos."ova"')
+        old=$(curl -s https://sumju.net/stable.json | jq -r '.hassos."ova"')
         echo "HASSOS_VERSION=${ver}" >> $GITHUB_ENV
+        echo "HA_VER=${old}" >> $GITHUB_ENV
         
     - name: Compare HassOS versions
       run: |
@@ -177,7 +179,7 @@ jobs:
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
+          
     - name: Notify on Telegram
       uses: appleboy/telegram-action@master
       with:
