@@ -10,7 +10,7 @@ on:
         required: false
         default: 'false'
   schedule:
-    - cron: '0 0 * * 6'
+    - cron: '0 3 * * *'
   watch:
     types: [started]
 
@@ -39,6 +39,25 @@ jobs:
         ver=$(curl -s https://version.home-assistant.io/stable.json | jq -r '.hassos."ova"')
         echo "HASSOS_VERSION=${ver}" >> $GITHUB_ENV
         
+    - name: Compare HassOS versions
+      run: |
+        if [ -z "${{ env.HASSOS_VERSION_OLD }}" ]; then
+          echo "No previous HassOS version found. Storing current version '${{ env.HASSOS_VERSION }}' as old version."
+          export HASSOS_VERSION_OLD="${{ env.HASSOS_VERSION }}"
+        elif [ "${{ env.HASSOS_VERSION }}" != "${{ env.HASSOS_VERSION_OLD }}" ]; then
+          echo "HassOS version has changed from '${{ env.HASSOS_VERSION_OLD }}' to '${{ env.HASSOS_VERSION }}' . Proceeding with next steps."
+        else
+          echo "HassOS offical version is '${{ env.HASSOS_VERSION }}' already builed . Stopping subsequent steps."
+          exit 1
+        fi
+    
+    - name: Cache HassOS Old Version
+      uses: actions/cache@v2
+      with:
+        path: dummy-path
+        key: ${{ env.HASSOS_VERSION_OLD }}
+        retention-period: 180
+    
     - name: Initialization environment
       run: |
         #sudo echo "nameserver 1.1.1.1" >> /etc/hosts
