@@ -186,9 +186,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
-   - name: Notify on Telegram
-     uses: appleboy/telegram-action@master
-     with:
-       to: ${{ secrets.TELEGRAM_CHAT_ID }}
-       token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-      message: "New release! Download it [here](${{ steps.upload-release.outputs.browser_download_url }})."
+    - name: Notify on Telegram
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_CHAT_ID }}
+        token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        message: "New release! Download it [here](${{ steps.upload-release.outputs.browser_download_url }})."
+
