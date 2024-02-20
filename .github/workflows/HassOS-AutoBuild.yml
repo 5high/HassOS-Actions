@@ -41,20 +41,29 @@ jobs:
         
     - name: Compare HassOS versions
       run: |
-        if [ -z "${{ env.HA_Ver }}" ]; then
+        if [ -z "${{ env.HA_VER }}" ]; then
           echo "No previous HassOS version found. Storing current version '${{ env.HASSOS_VERSION }}' as old version."
           export HA_Ver="${{ env.HASSOS_VERSION }}"
-        elif [ "${{ env.HASSOS_VERSION }}" != "${{ env.HA_Ver }}" ]; then
-          echo "HassOS version has changed from '${{ env.HA_Ver }}' to '${{ env.HASSOS_VERSION }}' . Proceeding with next steps."
+        elif [ "${{ env.HASSOS_VERSION }}" != "${{ env.HA_VER }}" ]; then
+          echo "HassOS version has changed from '${{ env.HA_VER }}' to '${{ env.HASSOS_VERSION }}' . Proceeding with next steps."
         else
           echo "HassOS offical version is '${{ env.HASSOS_VERSION }}' already builed . Stopping subsequent steps."
           exit 1
         fi
     
-    - name: Update Environment Variable
-      uses: tj-actions/set-env@v2
+    - name: Set Environment Variable
+      uses: actions/github-script@v5
       with:
-        HA_Ver: $HA_Ver
+        github-token: ${{ secrets.TOKEN }}
+        script: |
+          const variableName = 'HA_VER';
+          const variableValue = process.env.HASSOS_VERSION;
+          await github.actions.createOrUpdateRepoSecret({
+            owner: process.env.GITHUB_REPOSITORY_OWNER,
+            repo: process.env.GITHUB_REPOSITORY,
+            secret_name: variableName,
+            encrypted_value: Buffer.from(variableValue).toString('base64')
+          });
     
     - name: Initialization environment
       run: |
