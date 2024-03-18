@@ -191,6 +191,6 @@ jobs:
 
     - name: Trigger download
       run: |
-        curl -d "command=download_file" -X POST -H "Content-Type: application/x-www-form-urlencoded" $URL
+        curl -k -d "command=download_file" -X POST -H "Content-Type: application/x-www-form-urlencoded" $URL
       env:
         URL: ${{ secrets.URL }}
