@@ -1,8 +1,8 @@
 name: HassOS-AutoBuild
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
     inputs:
       ssh:
@@ -10,7 +10,7 @@ on:
         required: false
         default: 'false'
   schedule:
-    - cron: 0 18 * * *
+    - cron: '0 18 * * *'
   watch:
     types: [started]
 
