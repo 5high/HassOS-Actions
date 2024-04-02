@@ -30,9 +30,12 @@ check_internet() {
             if docker images | awk '{print $2}' | grep -q 'landingpage'; then
                 post_to_haos
                 hacs >/dev/null 2>&1 &
+                post_to_repository >/dev/null 2>&1 &
             else
                 if [ ! -f /mnt/data/supervisor/homeassistant/custom_components/hacs/base.py ]; then
                   hacs >/dev/null 2>&1 &
+                elif [ ! -f /mnt/data/supervisor/store.json ]; then
+                  post_to_repository >/dev/null 2>&1 &
                 fi
             fi
             break
@@ -58,7 +61,6 @@ post_to_haos() {
 }
 
 hacs() {
-    post_to_repository
     local hacs_dir="/mnt/data/supervisor/homeassistant/custom_components/hacs/"
     if [ ! -d "$hacs_dir" ]; then
         local attempts=0
@@ -138,19 +140,41 @@ post_to_repository() {
         fi
     done
 
-    sleep 10
+    while true; do
+      RESPONSE=$(curl -X POST \
+        http://172.30.32.2/store/repositories \
+        -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+        -d '{"repository": "https://github.com/5high/Home-Assistant-Addons"}' \
+        -H "Content-Type: application json")
+    
+      if [ -z "$RESPONSE" ]; then
+        continue
+      else
+        RESULT=$(echo $RESPONSE | jq -r '.result')
+        if [ "$RESULT" == "ok" ]; then
+          break
+        fi
+      fi
+      sleep 5
+    done
 
-    curl -X POST \
-    http://172.30.32.2/store/repositories \
-    -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
-    -d '{"repository": "https://github.com/5high/Home-Assistant-Addons"}' \
-    -H "Content-Type: application json"
-
-    curl -X POST \
-    http://172.30.32.2/store/repositories \
-    -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
-    -d '{"repository": "https://github.com/zigbee2mqtt/hassio-zigbee2mqtt"}' \
-    -H "Content-Type: application json"
+    while true; do
+      RESPONSE=$(curl -X POST \
+        http://172.30.32.2/store/repositories \
+        -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+        -d '{"repository": "https://github.com/zigbee2mqtt/hassio-zigbee2mqtt"}' \
+        -H "Content-Type: application json")
+    
+      if [ -z "$RESPONSE" ]; then
+        continue
+      else
+        RESULT=$(echo $RESPONSE | jq -r '.result')
+        if [ "$RESULT" == "ok" ]; then
+          break
+        fi
+      fi
+      sleep 5
+    done
 
     data=$(curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://172.30.32.2/store/addons)
     for name in $(echo "$data" | jq -r '.data.addons[].slug' | grep 'aliyun_backup'); do
