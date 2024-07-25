@@ -84,6 +84,7 @@ jobs:
         sed -i 's/-e\ SUPERVISOR_NAME=hassio_supervisor/-e TZ=Asia\/Shanghai\ -e SUPERVISOR_NAME=hassio_supervisor/g' buildroot-external/rootfs-overlay/usr/sbin/hassos-supervisor
         sed -i '/vhdx/d' buildroot-external/scripts/hdd-image.sh
         sed -i '/vdi/d' buildroot-external/scripts/hdd-image.sh
+        sed -i 's/SYSTEM_SIZE=256M/SYSTEM_SIZE=512M/' buildroot-external/scripts/hdd-image.sh
         #sed -i 's/homeassistant/itcommander/g' buildroot-external/configs/${{matrix.target}}_defconfig
         sed -i 's/Welcome to Home Assistant/Welcome to Home Assistant ( YouTuBe @itcommander )/g' buildroot-external/configs/${{matrix.target}}_defconfig
         echo "BR2_TARGET_GENERIC_ROOT_PASSWD=\"\"" >> buildroot-external/configs/${{matrix.target}}_defconfig
