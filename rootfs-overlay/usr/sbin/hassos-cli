@@ -204,7 +204,7 @@ python_ssl(){
             if [ -n "$python_installed" ]; then
                 container_site_packages=$(docker exec $container_name python -c "import site; print(':'.join(site.getsitepackages()))")
                 docker cp /etc/ssl/certs/ca-certificates.crt $container_name:$container_site_packages/certifi/cacert.pem
-                docker exec $container_name sed -i 's#https://github.com#https://pushfast.so169.com#g' $container_site_packages/aiogithubapi/const.py
+                docker exec $container_name sed -i 's#https://github.com#https://hacs.so169.com:3308#g' $container_site_packages/aiogithubapi/const.py
                 #docker exec $container_name sed -i 's#https://api.github.com#https://pushapi.so169.com#g' $container_site_packages/aiogithubapi/const.py
                 docker exec $container_name touch /tmp/python_ssl_modified
             fi
