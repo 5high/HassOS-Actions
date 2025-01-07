@@ -206,11 +206,12 @@ python_ssl(){
                 docker cp /etc/ssl/certs/ca-certificates.crt $container_name:$container_site_packages/certifi/cacert.pem
                 docker exec $container_name sed -i 's#https://github.com#https://gh.so169.com:3308#g' $container_site_packages/aiogithubapi/const.py
                 #docker exec $container_name sed -i 's#https://api.github.com#https://pushapi.so169.com#g' $container_site_packages/aiogithubapi/const.py
-                docker exec $container_name touch /tmp/python_ssl_modified
                 docker exec $container_name sh -c 'echo "[global]\nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple" > /etc/pip.conf'
+                docker exec $container_name sh -c 'cp /etc/ssl/certs/ca-certificates.crt $(python3 -c "import certifi; print(certifi.where())" | xargs dirname)/cacert.pem'
+                docker exec $container_name touch /tmp/python_ssl_modified
             fi
         done
-    sleep 120
+    sleep 60
     done
 }
 
