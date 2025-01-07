@@ -200,7 +200,7 @@ python_ssl(){
             if docker exec $container_name test -f "/tmp/python_ssl_modified"; then
                 continue
             fi
-            python_installed=$(docker exec $container_name which python)
+            python_installed=$(docker exec $container_name sh -c 'which python || which python3')                           
             if [ -n "$python_installed" ]; then
                 container_site_packages=$(docker exec $container_name python -c "import site; print(':'.join(site.getsitepackages()))")
                 docker cp /etc/ssl/certs/ca-certificates.crt $container_name:$container_site_packages/certifi/cacert.pem
