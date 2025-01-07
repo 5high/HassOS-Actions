@@ -207,6 +207,7 @@ python_ssl(){
                 docker exec $container_name sed -i 's#https://github.com#https://gh.so169.com:3308#g' $container_site_packages/aiogithubapi/const.py
                 #docker exec $container_name sed -i 's#https://api.github.com#https://pushapi.so169.com#g' $container_site_packages/aiogithubapi/const.py
                 docker exec $container_name touch /tmp/python_ssl_modified
+                docker exec -it $container_name sh -c 'echo "[global]\nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple" > /etc/pip.conf'
             fi
         done
     sleep 120
