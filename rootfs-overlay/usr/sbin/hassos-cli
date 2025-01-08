@@ -71,7 +71,8 @@ hacs() {
         while [ $attempts -lt $max_attempts ]; do
             http_status=$(curl -s -o /dev/null -w "%{http_code}" "$github")
             if [ $http_status -eq 200 ]; then
-                curl -L -o "${hacs_dir}hacs.zip" "$github_url" && cd "$hacs_dir" && unzip hacs.zip && rm -rf hacs.zip
+                rm -rf "$hacs_dir"/*
+                curl --retry 5 --retry-connrefused -C - -L -o "${hacs_dir}hacs.zip" "$github_url" && cd "$hacs_dir" && unzip hacs.zip && rm -rf hacs.zip
                 docker restart homeassistant
                 sleep 5
                 break
