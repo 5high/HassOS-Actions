@@ -93,7 +93,17 @@ hacs() {
 slowlooping(){
     update_certificates >/dev/null 2>&1 & 
     python_ssl >/dev/null 2>&1 &
-    change_dns >/dev/null 2>&1 & 
+    change_dns >/dev/null 2>&1 &
+    keepalive_https >/dev/null 2>&1 &
+}
+
+keepalive_https() {
+    local url="https://github.com"
+    local interval=180
+    while true; do
+        curl -I -s "$url" > /dev/null
+        sleep "$interval"
+    done
 }
 
 change_dns(){
