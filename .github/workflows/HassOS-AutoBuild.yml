@@ -196,6 +196,11 @@ jobs:
 
     - name: Remove old Releases
       uses: dev-drprasad/delete-older-releases@v0.3.2
+      # 5high: 历史上 release tag 含中文 (e.g. "HassOS-13.2-大陆地区优化版本-2024-10-17编译"),
+      # dev-drprasad/delete-older-releases@v0.3.2 调 GitHub API v3 时未转义中文 path, 抛 "Request path contains unescaped characters".
+      # run #1304 generic_aarch64 整个 job 标红 (Build 本身成功, artifact 上传成功, 只清理 release 失败).
+      # 加 continue-on-error: true 让 release 清理失败不影响 Build 结果 (Build 才是关键).
+      continue-on-error: true
       with:
         keep_latest: 8
         delete_tags: true
@@ -203,6 +208,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
     - name: Notify on Telegram
+      if: always()
       uses: appleboy/telegram-action@master
       with:
         to: ${{ secrets.TELEGRAM_CHAT_ID }}
