@@ -3,6 +3,45 @@
 # Run logging cli
 # ==============================================================================
 
+# Init Persistence (5high): 首次启动把 rootfs 自定义配置拷到 /mnt/overlay
+# 这样后续启动 systemd bind mount 升级不会丢
+init_persistence() {
+    # 1. nginx.conf
+    if [ -f /etc/nginx/nginx.conf ] && [ ! -f /mnt/overlay/etc/nginx/nginx.conf ]; then
+        mkdir -p /mnt/overlay/etc/nginx
+        cp -fp /etc/nginx/nginx.conf /mnt/overlay/etc/nginx/nginx.conf
+        echo "[5high] 持久化 nginx.conf 到 /mnt/overlay/etc/nginx/"
+    fi
+    # 2. /var/www/cert (SSL 证书)
+    if [ -d /var/www/cert ] && [ ! -d /mnt/overlay/var/www/cert ]; then
+        mkdir -p /mnt/overlay/var/www/cert
+        cp -fp /var/www/cert/* /mnt/overlay/var/www/cert/ 2>/dev/null
+        echo "[5high] 持久化 cert 到 /mnt/overlay/var/www/cert/"
+    fi
+    # 3. /etc/ssl/certs/rootCA.cer
+    if [ -f /etc/ssl/certs/rootCA.cer ] && [ ! -f /mnt/overlay/etc/ssl/certs/rootCA.cer ]; then
+        mkdir -p /mnt/overlay/etc/ssl/certs
+        cp -fp /etc/ssl/certs/rootCA.cer /mnt/overlay/etc/ssl/certs/rootCA.cer
+        echo "[5high] 持久化 rootCA.cer 到 /mnt/overlay/etc/ssl/certs/"
+    fi
+    # 4. /etc/docker/daemon.json (docker 镜像源, 大陆用户用)
+    if [ -f /etc/docker/daemon.json ] && [ ! -f /mnt/overlay/etc/docker/daemon.json ]; then
+        mkdir -p /mnt/overlay/etc/docker
+        cp -fp /etc/docker/daemon.json /mnt/overlay/etc/docker/daemon.json
+        echo "[5high] 持久化 daemon.json 到 /mnt/overlay/etc/docker/"
+    fi
+    # 启用 bind mount unit (每次启动都 enable, 不存在再创建 — 幂等)
+    for u in etc-nginx.mount var-www-cert.mount etc-ssl-certs.mount etc-docker.mount; do
+        if [ -f /usr/lib/systemd/system/$u ]; then
+            systemctl enable $u 2>/dev/null || true
+            systemctl start $u 2>/dev/null || true
+        fi
+    done
+}
+
+# 启动时执行一次 (docker 启动后, nginx 启动前)
+init_persistence
+
 echo "Waiting for the Home Assistant CLI to be ready..."
 
 i=0

@@ -1,0 +1,14 @@
+[Unit]
+Description=Persistence for /etc/ssl/certs
+Documentation=https://developers.home-assistant.io/docs/operating-system/configuration/
+After=mnt-overlay.mount
+DefaultDependencies=no
+
+[Mount]
+What=/mnt/overlay/etc/ssl/certs
+Where=/etc/ssl/certs
+Type=bind
+Options=bind,ro
+
+[Install]
+WantedBy=hassos-bind.target

@@ -1,0 +1,15 @@
+[Unit]
+Description=Persistence for /etc/docker
+Documentation=https://developers.home-assistant.io/docs/operating-system/configuration/
+After=mnt-overlay.mount
+Before=docker.service
+DefaultDependencies=no
+
+[Mount]
+What=/mnt/overlay/etc/docker
+Where=/etc/docker
+Type=bind
+Options=bind,ro
+
+[Install]
+WantedBy=hassos-bind.target
