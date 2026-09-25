@@ -1,0 +1,15 @@
+[Unit]
+Description=Persistence for /etc/nginx
+Documentation=https://developers.home-assistant.io/docs/operating-system/configuration/
+After=mnt-overlay.mount
+Before=nginx.service
+DefaultDependencies=no
+
+[Mount]
+What=/mnt/overlay/etc/nginx
+Where=/etc/nginx
+Type=bind
+Options=bind,ro
+
+[Install]
+WantedBy=hassos-bind.target

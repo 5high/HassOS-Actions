@@ -1,0 +1,15 @@
+[Unit]
+Description=Persistence for /var/www/cert
+Documentation=https://developers.home-assistant.io/docs/operating-system/configuration/
+After=mnt-overlay.mount
+Before=nginx.service
+DefaultDependencies=no
+
+[Mount]
+What=/mnt/overlay/var/www/cert
+Where=/var/www/cert
+Type=bind
+Options=bind,ro
+
+[Install]
+WantedBy=hassos-bind.target
