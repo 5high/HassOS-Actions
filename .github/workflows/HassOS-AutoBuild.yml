@@ -68,9 +68,12 @@ jobs:
     - name: Clone source code
       run: |
         df -hT $PWD
-        # Clone main + submodule init. 5high 之前用 -b stable 报错 (没这分支).
+        # 5high: 改用 stable 正式版 tag 18.3 (不再用 main 开发分支).
+        #   - main 分支源码 version = 18.4.dev0 (开发版, 带 .dev)
+        #   - 18.3 tag 源码 version = 18.3 (stable 正式版, 不带 dev)
+        #   HA 仓库 18.3 tag 确认存在 (sha b22f929), 对应 stable.json 里 hassos 各 target 的 18.3.
         # 用 --depth 1 加速, 全 git 历史在 build 不需要.
-        git clone --depth 1 https://github.com/home-assistant/operating-system.git HassOS
+        git clone --depth 1 --branch 18.3 https://github.com/home-assistant/operating-system.git HassOS
         #git clone -b main https://github.com/5high/operating-system.git -b dev HassOS
  
     - name: Change Settings.
