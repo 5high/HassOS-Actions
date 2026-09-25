@@ -68,8 +68,9 @@ jobs:
     - name: Clone source code
       run: |
         df -hT $PWD
-        # 5high: pin 到 stable-15.x 分支 (避免 main 不稳定破坏编译)
-        git clone https://github.com/home-assistant/operating-system.git -b stable HassOS
+        # Clone main + submodule init. 5high 之前用 -b stable 报错 (没这分支).
+        # 用 --depth 1 加速, 全 git 历史在 build 不需要.
+        git clone --depth 1 https://github.com/home-assistant/operating-system.git HassOS
         #git clone -b main https://github.com/5high/operating-system.git -b dev HassOS
  
     - name: Change Settings.
