@@ -12,4 +12,4 @@ Type=bind
 Options=bind,ro
 
 [Install]
-WantedBy=hassos-bind.target
+WantedBy=haos-bind.target

@@ -30,7 +30,8 @@ init_persistence() {
         cp -fp /etc/docker/daemon.json /mnt/overlay/etc/docker/daemon.json
         echo "[5high] 持久化 daemon.json 到 /mnt/overlay/etc/docker/"
     fi
-    # 启用 bind mount unit (每次启动都 enable, 不存在再创建 — 幂等)
+    # 启用 bind mount unit (每次启动都 enable + start, 保证 mount 一定生效)
+    # 关键: 即便 hassos-bind.target 没人拉, systemctl start 也会立刻 mount
     for u in etc-nginx.mount var-www-cert.mount etc-ssl-certs.mount etc-docker.mount; do
         if [ -f /usr/lib/systemd/system/$u ]; then
             systemctl enable $u 2>/dev/null || true
