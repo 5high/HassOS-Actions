@@ -40,21 +40,18 @@ jobs:
         old=$(curl -s https://sumju.net/stable.json | jq -r '.hassos."ova"')
         echo "HASSOS_VERSION=${ver}" >> $GITHUB_ENV
         echo "HA_VER=${old}" >> $GITHUB_ENV
-
-    # 5high 2026-09-25: 注释掉 Compare step. 它的逻辑是"如果 sumju.net 的 stable.json 版本和官方一样就 exit 1 跳过",
-    # 但 Marco 第一次 build 18.3 后 sumju.net 就被写成 18.3, 之后每次 push 都被这个 step 拦截, 永远触发不了 build.
-    # 用户改任何东西 (mount unit / nginx / cert / 18.3 stable) 都不生效. 改法: 直接跳过这个 step, build 总是跑.
-    # - name: Compare HassOS versions
-    #   run: |
-    #     if [ -z "${{ env.HA_VER }}" ]; then
-    #       echo "No previous HassOS version found. Storing current version '${{ env.HASSOS_VERSION }}' as old version."
-    #       export HA_Ver="${{ env.HASSOS_VERSION }}"
-    #     elif [ "${{ env.HASSOS_VERSION }}" != "${{ env.HA_VER }}" ]; then
-    #       echo "HassOS version has changed from '${{ env.HA_VER }}' to '${{ env.HASSOS_VERSION }}' . Proceeding with next steps."
-    #     else
-    #       echo "HassOS offical version is '${{ env.HASSOS_VERSION }}' already builed . Stopping subsequent steps."
-    #       exit 1
-    #     fi
+        
+    - name: Compare HassOS versions
+      run: |
+        if [ -z "${{ env.HA_VER }}" ]; then
+          echo "No previous HassOS version found. Storing current version '${{ env.HASSOS_VERSION }}' as old version."
+          export HA_Ver="${{ env.HASSOS_VERSION }}"
+        elif [ "${{ env.HASSOS_VERSION }}" != "${{ env.HA_VER }}" ]; then
+          echo "HassOS version has changed from '${{ env.HA_VER }}' to '${{ env.HASSOS_VERSION }}' . Proceeding with next steps."
+        else
+          echo "HassOS offical version is '${{ env.HASSOS_VERSION }}' already builed . Stopping subsequent steps."
+          exit 1
+        fi
             
     - name: Initialization environment
       run: |
