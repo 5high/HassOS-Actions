@@ -1,0 +1,25 @@
+[Unit]
+Description=5high Reverse Proxy (nginx host binding + DNS + cert propagation)
+# Bind-mount units must be active first; then nginx itself must not
+# crash-loop if a daemon misbehaves, hence After=network-pre but not
+# requires network-online.
+After=multi-user.target etc-nginx.mount var-www-cert.mount etc-ssl-certs.mount etc-docker.mount
+Wants=etc-nginx.mount var-www-cert.mount etc-ssl-certs.mount etc-docker.mount
+
+[Service]
+# bash for arithmetic; root needs access to /var/www + /mnt/overlay.
+Type=simple
+ExecStart=/bin/bash /usr/local/sbin/reverse-proxy.sh
+# Restart on any non-zero exit so transient curl/docker failures
+# do not wedge the whole host. 30 s ceiling avoids busy-loop when
+# Supervisor container is permanently down.
+Restart=on-failure
+RestartSec=30
+# Keep journal noise down; the script echoes meaningful lines that
+# we still want visible for on-site debug.
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=5high-reverse-proxy
+
+[Install]
+WantedBy=multi-user.target
